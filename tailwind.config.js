@@ -1,5 +1,9 @@
 module.exports = {
-  content: ["./src/pages/**/*.{js,ts,jsx,tsx}", "./src/components/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx}",
+    "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/sections/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       animation: {
@@ -13,6 +17,7 @@ module.exports = {
         apple: "#D16D68",
         gum: "#D15362",
         blackberry: "#1B202F",
+        grape: "#211d24",
       },
       spacing: {
         orbit: "1000px",
