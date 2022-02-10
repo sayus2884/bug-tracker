@@ -1,6 +1,12 @@
+import React from "react";
 import { Sun, Rays, Earth, Moon } from "./Orbit.styles";
 
-function Orbit({ children, dark, className }) {
+interface Props {
+  className?: string;
+  dark?: boolean;
+}
+
+const Orbit: React.FC<Props> = ({ dark = false, className }) => {
   return (
     <div className={`${className}`}>
       <div className="relative h-full flex flex-col items-center justify-center">
@@ -13,6 +19,6 @@ function Orbit({ children, dark, className }) {
       </div>
     </div>
   );
-}
+};
 
 export default Orbit;

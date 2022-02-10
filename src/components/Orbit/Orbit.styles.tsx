@@ -1,8 +1,11 @@
 import styled from "styled-components";
 
+interface Theme {
+  dark: boolean;
+}
+
 export const Sun = styled.div`
-  background: url(${({ dark }) =>
-      dark ? "/images/logo_dark.svg" : "/images/logo.svg"})
+  background: url(${({ dark }: Theme) => (dark ? "/images/logo_dark.svg" : "/images/logo.svg")})
     no-repeat center;
   background-size: contain;
   width: 100%;
@@ -11,8 +14,7 @@ export const Sun = styled.div`
 `;
 
 export const Rays = styled.div`
-  background: url(${({ dark }) =>
-      dark ? "/images/rays_dark.svg" : "/images/rays.svg"})
+  background: url(${({ dark }: Theme) => (dark ? "/images/rays_dark.svg" : "/images/rays.svg")})
     no-repeat center;
   background-size: contain;
   width: 100%;
@@ -21,8 +23,7 @@ export const Rays = styled.div`
 `;
 
 export const Earth = styled.div`
-  background: url(${({ dark }) =>
-      dark ? "/images/earth_dark.svg" : "/images/earth.svg"})
+  background: url(${({ dark }: Theme) => (dark ? "/images/earth_dark.svg" : "/images/earth.svg")})
     no-repeat center;
   background-size: contain;
   width: 100%;
@@ -31,8 +32,7 @@ export const Earth = styled.div`
 `;
 
 export const Moon = styled.div`
-  background: url(${({ dark }) =>
-      dark ? "/images/moon_dark.svg" : "/images/moon.svg"})
+  background: url(${({ dark }: Theme) => (dark ? "/images/moon_dark.svg" : "/images/moon.svg")})
     no-repeat center;
   background-size: contain;
   width: 20%;
