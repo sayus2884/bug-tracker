@@ -1,42 +1,50 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { CaretDown, Plus } from "phosphor-react";
+
 import Input from "./../../components/Input/Input";
 
 import useOutsideObserver from "./../../hooks/use-outside-observer";
 import useStore from "./../../hooks/use-store";
+import ProjectContext from "./../../contexts/ProjectContext";
 
 interface Props {
   className?: string;
 }
 
-const options: string[] = ["Option 1", "Option 2", "Option 3"];
-
 const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
-  const { getProjects, addNewProject } = useStore();
+  const {  setCurrentProject } = useContext(ProjectContext);
+
+  const { setCurrentProjectId, getProjects, getProject, addNewProject } = useStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(
+  const [selectedOptionName, setSelectedOptionName] = useState(
     getProjects().length > 0 ? getProjects()[0].name : "",
   );
   const [options, setOptions] = useState(getProjects());
   const containerRef = useRef(null);
 
-  const handleOptionSelected = (value: string): void => {
-    setSelectedOption(value);
+  const handleOptionSelected = (id: string, name: string): void => {
+    setSelectedOptionName(name);
+    setCurrentProject(getProject(id));
+    setCurrentProjectId(id);
+
     close();
   };
 
   const handleAddProject = (): void => {
-    if (options.some(({ name }) => name === selectedOption)) {
+    if (options.some(({ name }) => name === selectedOptionName)) {
       return;
     }
 
-    addNewProject(selectedOption);
+    const newProject = addNewProject(selectedOptionName);
+    setCurrentProject(newProject);
+    setCurrentProjectId(newProject.id);
     setOptions(getProjects());
+
     close();
   };
 
   const handleProjectInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setSelectedOption(event.target.value);
+    setSelectedOptionName(event.target.value);
   };
 
   const close = (): void => {
@@ -64,7 +72,7 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
             className="outline:none px-4 py-2"
             onFocus={open}
             onChange={handleProjectInputChange}
-            value={selectedOption}
+            value={selectedOptionName}
           />
 
           {(isOpen || !isOptionsAvailable) && (
@@ -88,10 +96,10 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
           aria-orientation="vertical"
           aria-labelledby="menu-button">
           <div className="py-1" role="none">
-            {options.map(({ name }, i) => (
+            {options.map(({ id, name }, i) => (
               <button
                 key={i}
-                onClick={() => handleOptionSelected(name)}
+                onClick={() => handleOptionSelected(id, name)}
                 className="text-gray-700 block px-4 py-2 text-sm text-left w-full hover:bg-red-100">
                 {name}
               </button>

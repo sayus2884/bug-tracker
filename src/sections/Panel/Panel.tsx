@@ -24,7 +24,7 @@ const Panel: React.FC<Props> = ({
   ...props
 }) => {
   const [cardTitle, setCardTitle] = useState("");
-  const { addNewTask } = useStore();
+  const { addNewTask, generateId } = useStore();
 
   const handleCardTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCardTitle(event.target.value);
@@ -32,6 +32,7 @@ const Panel: React.FC<Props> = ({
 
   const handleAddCardClick = (): void => {
     const newTask: Task = {
+      id: generateId(),
       description: cardTitle,
       branch: "",
       type: "",
@@ -61,9 +62,10 @@ const Panel: React.FC<Props> = ({
         />
       )}
       <div className="flex flex-col gap-10">
-        {tasks.map(({ description, branch, type, priority }, i) => (
+        {tasks.map(({ id, description, branch, type, priority }, i) => (
           <CardTask
             key={i}
+            id={id}
             className="bg-red-200"
             description={description}
             branch={branch}

@@ -1,34 +1,47 @@
+import { useContext, useEffect } from "react";
 import type { NextPage } from "next";
-import CardTask from "../components/CardTask/CardTask";
 
 import Panel from "../sections/Panel/Panel";
 import Grid from "./../components/Grid/Grid";
+
 import useStore, { Project, Task } from "./../hooks/use-store";
-import { useState } from "react";
+import ProjectContext from "../contexts/ProjectContext";
 
 const Home: NextPage = () => {
-  const { getProject } = useStore();
-  const [currentProject, setCurrentProject] = useState(getProject("test"));
+  const { getCurrentProjectId, getProject } = useStore();
+  const { currentProject, setCurrentProject } = useContext(ProjectContext);
 
   const handleOnTaskAdded = (newTask: Task): void => {
-    setCurrentProject((project): Project => {
+    setCurrentProject((project: Project): Project => {
       project.tasks.push(newTask);
       return project;
     });
   };
 
-  //TODO: Change currentProject.name to id
+  // Initialize project grid if currentProjectId exists in store
+  useEffect(() => {
+    const currentProjectId = getCurrentProjectId();
+
+    // TODO: set error handler if currentPorjectId exists but project doesn't
+    // TODO: set logic error handler; if currentPorjectId doesn't exists, then set the first item in projects list to currentProjectId.
+    if (currentProjectId) {
+      setCurrentProject(getProject(currentProjectId));
+    }
+  }, []);
+
   return (
     <>
       <Grid className="flex gap-20">
-        <Panel
-          title="Backlogs"
-          className="bg-red-100"
-          projectId={currentProject.name}
-          tasks={currentProject.tasks}
-          canAddCard
-          onTaskAdded={handleOnTaskAdded}
-        />
+        {currentProject && (
+          <Panel
+            title="Backlogs"
+            className="bg-red-100"
+            projectId={currentProject.id}
+            tasks={currentProject.tasks}
+            canAddCard
+            onTaskAdded={handleOnTaskAdded}
+          />
+        )}
       </Grid>
     </>
   );

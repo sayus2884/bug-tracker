@@ -1,6 +1,10 @@
+import UIDGenerator from "uid-generator";
 import Cookies from "js-cookie";
 
+const uidgen = new UIDGenerator(64);
+
 export interface Task {
+  id: string;
   description: string;
   branch: string;
   type: string;
@@ -13,44 +17,50 @@ export interface Project {
 }
 
 const UseStore = () => {
+  const generateId = (): string => uidgen.generateSync();
+
+  const setCurrentProjectId = (id: string): void => {
+    Cookies.set("currentProjectId", id);
+  };
+
+  const getCurrentProjectId = (): string | undefined => {
+    return Cookies.get("currentProjectId");
+  };
+
   const getProjects = (): Project[] => {
     const projectsStr = Cookies.get("projects") || "[]";
     const projects: Project[] = JSON.parse(projectsStr);
     return projects;
   };
 
-  //TODO: search project by id, not name
-  const getProject = (name: string): Project => {
+  const getProject = (id: string): Project => {
     const projectsStr = Cookies.get("projects") || "[]";
     const projects = JSON.parse(projectsStr);
-    const project = projects.find((project: Project) => project.name === name);
+    const project = projects.find((project: Project) => project.id === id);
 
     return project;
   };
 
-  const addNewProject = (name: string): void => {
+  const addNewProject = (name: string): Project => {
     const projectsStr = Cookies.get("projects") || "[]";
     const newProjects: Project[] = JSON.parse(projectsStr);
-    newProjects.push({
-      id: "test",
+
+    const newProject: Project = {
+      id: generateId(),
       name,
-      tasks: [
-        {
-          description: "this is the card description",
-          type: "feature",
-          branch: "",
-          priority: 1,
-        },
-      ],
-    });
+      tasks: [],
+    };
+
+    newProjects.push(newProject);
 
     Cookies.set("projects", JSON.stringify(newProjects));
+
+    return newProject;
   };
 
   const addNewTask = (projectId: string, task: Task): void => {
     const newProjects = getProjects().map((project) => {
-      //TODO: Change comparison to id, instead of name
-      if (project.name !== projectId) {
+      if (project.id !== projectId) {
         return project;
       }
 
@@ -63,7 +73,23 @@ const UseStore = () => {
     Cookies.set("projects", JSON.stringify(newProjects));
   };
 
-  return { addNewTask, getProjects, getProject, addNewProject };
+  //   const removeTask = (projectId: string, task: Task): void => {
+  //     const newProjects = getProjects().map((project) => {
+  //       //TODO: Change comparison to id, instead of name
+  //       if (project.name !== projectId) {
+  //         return project;
+  //       }
+
+  //       const newTasks = project.tasks;
+  //       newTasks.push(task);
+
+  //       return project;
+  //     });
+
+  //     Cookies.set("projects", JSON.stringify(newProjects));
+  //   };
+
+  return { setCurrentProjectId, getCurrentProjectId, addNewTask, getProjects, getProject, addNewProject, generateId };
 };
 
 export default UseStore;
