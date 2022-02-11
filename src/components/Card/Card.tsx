@@ -1,4 +1,5 @@
 import React from "react";
+import { Task } from "./../../hooks/use-store";
 
 interface Props {
   className?: string;

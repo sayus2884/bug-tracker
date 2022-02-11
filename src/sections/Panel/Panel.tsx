@@ -1,17 +1,21 @@
 import React, { useState } from "react";
-import InputInline from "./../InputInline/InputInline";
+import CardTask from "../../components/CardTask/CardTask";
+import InputInline from "../../components/InputInline/InputInline";
+import { Task } from "./../../hooks/use-store";
 
 interface Props {
   className?: string;
   title?: string;
   canAddCard?: boolean;
+  tasks: Task[];
 }
 
 const Panel: React.FC<Props> = ({
   children,
+  className,
   canAddCard = false,
   title = "Panel Name",
-  className,
+  tasks,
   ...props
 }) => {
   const [cardTitle, setCardTitle] = useState("");
@@ -30,7 +34,7 @@ const Panel: React.FC<Props> = ({
 
   return (
     <div className={`${className} flex flex-col gap-20 p-10 min-w-[330px]`} {...props}>
-      <h2>{title}</h2>
+      <h2 className="text-24">{title}</h2>
       {canAddCard && (
         <InputInline
           buttonText="Add"
@@ -39,7 +43,18 @@ const Panel: React.FC<Props> = ({
           value={cardTitle}
         />
       )}
-      <div className="flex flex-col gap-10">{children}</div>
+      <div className="flex flex-col gap-10">
+        {tasks.map(({ description, branch, type, priority }, i) => (
+          <CardTask
+            key={i}
+            className="bg-red-200"
+            description={description}
+            branch={branch}
+            type={type}
+            priority={priority}
+          />
+        ))}
+      </div>
     </div>
   );
 };

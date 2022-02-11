@@ -1,27 +1,21 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { GithubLogo } from "phosphor-react";
 import CardTask from "../components/CardTask/CardTask";
 
-import Orbit from "../components/Orbit/Orbit";
-import Panel from "../components/Panel/Panel";
+import Panel from "../sections/Panel/Panel";
 import Grid from "./../components/Grid/Grid";
+import useStore from "./../hooks/use-store";
+import { useState } from "react";
 
 const Home: NextPage = () => {
+  const { getProject } = useStore();
+  const [currentProject, setCurrentProject] = useState(getProject("test"));
+
+  console.log(currentProject);
+
   return (
     <>
       <Grid className="flex gap-20">
-        <Panel className="bg-red-100" canAddCard>
-          <CardTask className="bg-red-200" />
-          <CardTask className="bg-red-200" />
-          <CardTask className="bg-red-200" />
-          <CardTask className="bg-red-200" />
-          <CardTask className="bg-red-200" />
-        </Panel>
-        <Panel className="bg-red-100">
-          <CardTask className="bg-red-200" />
-        </Panel>
+        <Panel title="Backlogs" className="bg-red-100" tasks={currentProject.tasks} canAddCard />
       </Grid>
     </>
   );
