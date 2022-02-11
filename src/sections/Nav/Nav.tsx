@@ -1,4 +1,5 @@
 import React from "react";
+import ProjectSelector from "../ProjectSelector/ProjectSelector";
 
 interface Props {
   className?: string;
@@ -9,7 +10,7 @@ const Nav: React.FC<Props> = ({ className }) => {
     <div className={`${className}`}>
       <div className="flex gap-25 h-full items-center">
         <div>logo</div>
-        <div>project dropdown</div>
+        <ProjectSelector />
       </div>
     </div>
   );
