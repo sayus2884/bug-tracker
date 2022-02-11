@@ -59,7 +59,7 @@ const UseStore = () => {
   };
 
   const addNewTask = (projectId: string, task: Task): void => {
-    const newProjects = getProjects().map((project) => {
+    const modifiedProjects = getProjects().map((project) => {
       if (project.id !== projectId) {
         return project;
       }
@@ -70,26 +70,33 @@ const UseStore = () => {
       return project;
     });
 
-    Cookies.set("projects", JSON.stringify(newProjects));
+    Cookies.set("projects", JSON.stringify(modifiedProjects));
   };
 
-  //   const removeTask = (projectId: string, task: Task): void => {
-  //     const newProjects = getProjects().map((project) => {
-  //       //TODO: Change comparison to id, instead of name
-  //       if (project.name !== projectId) {
-  //         return project;
-  //       }
+  const removeTask = (projectId: string, taskId: string): void => {
+    const modifiedProjects = getProjects().map((project) => {
+      if (project.id !== projectId) {
+        return project;
+      }
 
-  //       const newTasks = project.tasks;
-  //       newTasks.push(task);
+      const modifiedTasks = project.tasks.filter(({ id }) => id !== taskId);
 
-  //       return project;
-  //     });
+      return { ...project, tasks: modifiedTasks };
+    });
 
-  //     Cookies.set("projects", JSON.stringify(newProjects));
-  //   };
+    Cookies.set("projects", JSON.stringify(modifiedProjects));
+  };
 
-  return { setCurrentProjectId, getCurrentProjectId, addNewTask, getProjects, getProject, addNewProject, generateId };
+  return {
+    setCurrentProjectId,
+    getCurrentProjectId,
+    addNewTask,
+    removeTask,
+    getProjects,
+    getProject,
+    addNewProject,
+    generateId,
+  };
 };
 
 export default UseStore;

@@ -18,6 +18,13 @@ const Home: NextPage = () => {
     });
   };
 
+  const handleOnTaskRemoved = (taskId: string): void => {
+    setCurrentProject((project: Project): Project => {
+      const modifiedTasks = project.tasks.filter(({ id }) => id !== taskId);
+      return { ...project, tasks: modifiedTasks };
+    });
+  };
+
   // Initialize project grid if currentProjectId exists in store
   useEffect(() => {
     const currentProjectId = getCurrentProjectId();
@@ -40,6 +47,7 @@ const Home: NextPage = () => {
             tasks={currentProject.tasks}
             canAddCard
             onTaskAdded={handleOnTaskAdded}
+            onTaskRemoved={handleOnTaskRemoved}
           />
         )}
       </Grid>

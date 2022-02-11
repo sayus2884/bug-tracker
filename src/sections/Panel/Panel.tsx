@@ -10,6 +10,7 @@ interface Props {
   projectId: string;
   tasks: Task[];
   onTaskAdded: (task: Task) => void;
+  onTaskRemoved: (id: string) => void;
 }
 
 const Panel: React.FC<Props> = ({
@@ -21,16 +22,17 @@ const Panel: React.FC<Props> = ({
   tasks,
 
   onTaskAdded,
+  onTaskRemoved,
   ...props
 }) => {
   const [cardTitle, setCardTitle] = useState("");
-  const { addNewTask, generateId } = useStore();
+  const { addNewTask, generateId, removeTask } = useStore();
 
   const handleCardTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCardTitle(event.target.value);
   };
 
-  const handleAddCardClick = (): void => {
+  const handleAddTaskClick = (): void => {
     const newTask: Task = {
       id: generateId(),
       description: cardTitle,
@@ -46,6 +48,12 @@ const Panel: React.FC<Props> = ({
     reset();
   };
 
+  const handleRemoveTaskClick = (taskId: string): void => {
+    removeTask(projectId, taskId);
+
+    onTaskRemoved(taskId);
+  };
+
   const reset = (): void => {
     setCardTitle("");
   };
@@ -59,7 +67,7 @@ const Panel: React.FC<Props> = ({
         <InputInline
           buttonText="Add"
           onChange={handleCardTitleInputChange}
-          onClick={handleAddCardClick}
+          onClick={handleAddTaskClick}
           buttonDisabled={!isCardTitleMinChar}
           value={cardTitle}
         />
@@ -74,6 +82,7 @@ const Panel: React.FC<Props> = ({
             branch={branch}
             type={type}
             priority={priority}
+            onRemoveTask={handleRemoveTaskClick}
           />
         ))}
       </div>
