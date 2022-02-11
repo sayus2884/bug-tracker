@@ -4,10 +4,10 @@ interface Props {
   className?: string;
 }
 
-const Card: React.FC<Props> = ({ className, ...props }) => {
+const Card: React.FC<Props> = ({ children, className, ...props }) => {
   return (
     <div className={`${className} min-h-[150px] px-15 py-10`} {...props}>
-      add Card stuff here
+      {children}
     </div>
   );
 };

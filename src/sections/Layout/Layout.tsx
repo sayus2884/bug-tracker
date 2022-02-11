@@ -13,8 +13,8 @@ const Layout: React.FC = ({ children }) => {
 
       <Nav className="absolute w-full h-64 px-25 bg-grape text-white fixed" />
 
-      <main className="pt-64 h-screen bg-gray-50">
-        <div className="py-15 px-45 h-full">{children}</div>
+      <main className="pt-64 h-full bg-gray-50">
+        <div className="py-15 px-45 h-full overflow-auto">{children}</div>
       </main>
     </div>
   );
