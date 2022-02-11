@@ -12,7 +12,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Grid className="flex gap-20">
-        <Panel className="bg-red-100">
+        <Panel className="bg-red-100" canAddCard>
           <Card className="bg-red-200" />
           <Card className="bg-red-200" />
           <Card className="bg-red-200" />
