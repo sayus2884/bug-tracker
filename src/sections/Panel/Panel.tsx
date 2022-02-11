@@ -1,30 +1,47 @@
 import React, { useState } from "react";
 import CardTask from "../../components/CardTask/CardTask";
 import InputInline from "../../components/InputInline/InputInline";
-import { Task } from "./../../hooks/use-store";
+import useStore, { Task } from "./../../hooks/use-store";
 
 interface Props {
   className?: string;
   title?: string;
   canAddCard?: boolean;
+  projectId: string;
   tasks: Task[];
+  onTaskAdded: (task: Task) => void;
 }
 
 const Panel: React.FC<Props> = ({
   children,
   className,
   canAddCard = false,
+  projectId,
   title = "Panel Name",
   tasks,
+
+  onTaskAdded,
   ...props
 }) => {
   const [cardTitle, setCardTitle] = useState("");
+  const { addNewTask } = useStore();
 
   const handleCardTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCardTitle(event.target.value);
   };
 
   const handleAddCardClick = (): void => {
+    const newTask: Task = {
+      description: cardTitle,
+      branch: "",
+      type: "",
+      priority: 0,
+    };
+
+    addNewTask(projectId, newTask);
+
+    onTaskAdded(newTask);
+
     reset();
   };
 

@@ -47,7 +47,23 @@ const UseStore = () => {
     Cookies.set("projects", JSON.stringify(newProjects));
   };
 
-  return { getProjects, getProject, addNewProject };
+  const addNewTask = (projectId: string, task: Task): void => {
+    const newProjects = getProjects().map((project) => {
+      //TODO: Change comparison to id, instead of name
+      if (project.name !== projectId) {
+        return project;
+      }
+
+      const newTasks = project.tasks;
+      newTasks.push(task);
+
+      return project;
+    });
+
+    Cookies.set("projects", JSON.stringify(newProjects));
+  };
+
+  return { addNewTask, getProjects, getProject, addNewProject };
 };
 
 export default UseStore;
