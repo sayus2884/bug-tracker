@@ -12,7 +12,7 @@ interface Props {
 }
 
 const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
-  const {  setCurrentProject } = useContext(ProjectContext);
+  const { setCurrentProject } = useContext(ProjectContext);
 
   const { setCurrentProjectId, getProjects, getProject, addNewProject } = useStore();
   const [isOpen, setIsOpen] = useState(false);
@@ -56,6 +56,8 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
   };
 
   const isOptionsAvailable = options.length > 0;
+  const isSelectedOptionNameAvailable =
+    selectedOptionName.length > 3 && !options.some(({ name }) => name === selectedOptionName);
 
   useOutsideObserver(containerRef, () => close());
 
@@ -76,7 +78,10 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
           />
 
           {(isOpen || !isOptionsAvailable) && (
-            <button className="hover:bg-red-100 px-4 py-1" onClick={handleAddProject}>
+            <button
+              className="hover:bg-red-100 px-4 py-1 disabled:opacity-50"
+              onClick={handleAddProject}
+              disabled={!isSelectedOptionNameAvailable}>
               <Plus size={20} weight="bold" />
             </button>
           )}

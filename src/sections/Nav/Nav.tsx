@@ -9,7 +9,7 @@ const Nav: React.FC<Props> = ({ className }) => {
   return (
     <div className={`${className}`}>
       <div className="flex gap-25 h-full items-center">
-        <div>logo</div>
+        <div>The Bug Tracker</div>
         <ProjectSelector />
       </div>
     </div>

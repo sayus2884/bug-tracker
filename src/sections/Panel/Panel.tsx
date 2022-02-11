@@ -50,6 +50,8 @@ const Panel: React.FC<Props> = ({
     setCardTitle("");
   };
 
+  const isCardTitleMinChar = cardTitle.length >= 3;
+
   return (
     <div className={`${className} flex flex-col gap-20 p-10 min-w-[330px]`} {...props}>
       <h2 className="text-24">{title}</h2>
@@ -58,6 +60,7 @@ const Panel: React.FC<Props> = ({
           buttonText="Add"
           onChange={handleCardTitleInputChange}
           onClick={handleAddCardClick}
+          buttonDisabled={!isCardTitleMinChar}
           value={cardTitle}
         />
       )}

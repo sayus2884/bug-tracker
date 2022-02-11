@@ -8,7 +8,8 @@ interface Props {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   value: string | number | readonly string[];
-  disabled?: boolean;
+  buttonDisabled?: boolean;
+  inputDisabled?: boolean;
 }
 
 const InputInline: React.FC<Props> = ({
@@ -17,7 +18,8 @@ const InputInline: React.FC<Props> = ({
   onClick,
   onChange,
   value,
-  disabled,
+  inputDisabled,
+  buttonDisabled,
   ...props
 }) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,10 +34,10 @@ const InputInline: React.FC<Props> = ({
         className={`${className} w-full px-2 outline-none`}
         onChange={handleInputChange}
         value={value}
-        disabled={disabled}
+        disabled={inputDisabled}
         {...props}
       />
-      <Button className="px-3 py-2 bg-red-300" onClick={onClick} disabled={disabled}>
+      <Button className="px-3 py-2 bg-red-300" onClick={onClick} disabled={buttonDisabled}>
         {buttonText}
       </Button>
     </div>
