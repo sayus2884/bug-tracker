@@ -2,8 +2,8 @@ import React from "react";
 
 interface Props {
   className?: string;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  value?: string | number | readonly string[];
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  value: string | number | readonly string[];
 }
 
 const Input: React.FC<Props> = ({ className, onChange, value, ...props }) => {

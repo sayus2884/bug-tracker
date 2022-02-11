@@ -16,14 +16,16 @@ const Panel: React.FC<Props> = ({
 }) => {
   const [cardTitle, setCardTitle] = useState("");
 
-  const handleCardTitleInputChange: React.ChangeEventHandler = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleCardTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCardTitle(event.target.value);
   };
 
-  const handleAddCardClick: React.MouseEventHandler = () => {
-    console.log("Add new Card");
+  const handleAddCardClick = (): void => {
+    reset();
+  };
+
+  const reset = (): void => {
+    setCardTitle("");
   };
 
   return (
@@ -34,6 +36,7 @@ const Panel: React.FC<Props> = ({
           buttonText="Add"
           onChange={handleCardTitleInputChange}
           onClick={handleAddCardClick}
+          value={cardTitle}
         />
       )}
       <div className="flex flex-col gap-10">{children}</div>

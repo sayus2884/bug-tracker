@@ -5,9 +5,9 @@ import Input from "./../Input/Input";
 interface Props {
   className?: string;
   buttonText?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
-  onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
-  value?: string | number | readonly string[];
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  value: string | number | readonly string[];
 }
 
 const InputInline: React.FC<Props> = ({
