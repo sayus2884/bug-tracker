@@ -47,9 +47,9 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
     setIsOpen(true);
   };
 
-  useOutsideObserver(containerRef, () => close());
-
   const isOptionsAvailable = options.length > 0;
+
+  useOutsideObserver(containerRef, () => close());
 
   return (
     <div className="relative inline-block text-left w-300" ref={containerRef}>
@@ -57,7 +57,7 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
         <div
           className={`inline-flex justify-between w-full ${
             isOpen && isOptionsAvailable ? "rounded-t-md" : "rounded-md"
-          } border border-gray-300 shadow-sm bg-white text-sm font-medium text-gray-700 focus:outline-none focus:ring-indigo-500 overflow-hidden`}
+          } border border-gray-300 shadow-sm bg-white text-sm font-medium text-gray-700 overflow-hidden`}
           aria-expanded="true"
           aria-haspopup="true">
           <Input
