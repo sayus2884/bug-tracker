@@ -1,6 +1,20 @@
 This is a cap stone project for reporting and managing bugs, features, and tasks which help manage a project's life cycle from beginning to end. The project is open-source, so feel free to clone the project and/or use the app and use it for your own use.
 
-**[To app site](https://bug-tracker-delta.vercel.app/)**
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+or
+
+**[Go to app site](https://bug-tracker-delta.vercel.app/)**
 
 ## Status: Version 1 - Alpha Development
 
@@ -21,15 +35,3 @@ Now, the overall aesthetics isn't going to be pretty but the app itself does wor
 >## <del>Research and Wireframing</del> **(DONE)**
 >
 >The project is currently undergoing research for possible features to add into the application. It will simultaneously undergo wireframing to sort out the flow and user experience of the app.
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
