@@ -1,6 +1,12 @@
 {
   "name": "bug-tracker",
+  "version": "1.0.0-a",
   "private": true,
+  "author": {
+    "name": "Jonacius Villamor", 
+    "email": "contact@jonacius-villamor.com",
+    "url": "https://jonacius-villamor.com"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
