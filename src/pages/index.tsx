@@ -39,17 +39,19 @@ const Home: NextPage = () => {
   return (
     <>
       <Grid className="flex gap-20">
-        {currentProject && (
-          <Panel
-            title="Backlogs"
-            className="bg-red-100"
-            projectId={currentProject.id}
-            tasks={currentProject.tasks}
-            canAddCard
-            onTaskAdded={handleOnTaskAdded}
-            onTaskRemoved={handleOnTaskRemoved}
-          />
-        )}
+        {currentProject &&
+          currentProject.panels.map((title, i) => (
+            <Panel
+              key={i}
+              title={title}
+              className="bg-red-100"
+              projectId={currentProject.id}
+              tasks={currentProject.tasks}
+              canAddCard={title === "Backlog"}
+              onTaskAdded={handleOnTaskAdded}
+              onTaskRemoved={handleOnTaskRemoved}
+            />
+          ))}
       </Grid>
     </>
   );

@@ -9,11 +9,13 @@ export interface Task {
   branch: string;
   type: string;
   priority: number;
+  panel: string;
 }
 export interface Project {
   id: string;
   name: string;
   tasks: Task[];
+  panels: string[];
 }
 
 const UseStore = () => {
@@ -49,6 +51,7 @@ const UseStore = () => {
       id: generateId(),
       name,
       tasks: [],
+      panels: ["Backlog", "To do", "Bugs", "In Progress", "Testing", "Done"],
     };
 
     newProjects.push(newProject);

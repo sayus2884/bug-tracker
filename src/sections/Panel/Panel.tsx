@@ -39,6 +39,7 @@ const Panel: React.FC<Props> = ({
       branch: "",
       type: "",
       priority: 0,
+      panel: "panelId",
     };
 
     addNewTask(projectId, newTask);
@@ -73,7 +74,7 @@ const Panel: React.FC<Props> = ({
         />
       )}
       <div className="flex flex-col gap-10">
-        {tasks.map(({ id, description, branch, type, priority }, i) => (
+        {tasks.map(({ id, description, branch, type, priority, panel }, i) => (
           <CardTask
             key={i}
             id={id}
@@ -82,6 +83,7 @@ const Panel: React.FC<Props> = ({
             branch={branch}
             type={type}
             priority={priority}
+            panel={panel}
             onRemoveTask={handleRemoveTaskClick}
           />
         ))}
