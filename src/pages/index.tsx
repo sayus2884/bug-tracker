@@ -69,46 +69,46 @@ const Home: NextPage = () => {
 
         return newCurrentProject;
       });
-    }
-
-    // Move tasks between panels
-    const newStartTaskIds = [...startPanel.taskIds];
-    newStartTaskIds.splice(source.index, 1);
-    const newStartPanel: IPanel = {
-      ...startPanel,
-      taskIds: newStartTaskIds,
-    };
-
-    const newFinishTaskIds = [...finishPanel.taskIds];
-    newFinishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinishPanel: IPanel = {
-      ...finishPanel,
-      taskIds: newFinishTaskIds,
-    };
-
-    setCurrentProject((prevCurrentProject: Project) => {
-      const newPanels = prevCurrentProject.panels.map((panel: IPanel) => {
-        if (panel.id === newStartPanel.id) {
-          return newStartPanel;
-        }
-
-        if (panel.id === newFinishPanel.id) {
-          return newFinishPanel;
-        }
-
-        return panel;
-      });
-
-      const newCurrentProject = {
-        ...prevCurrentProject,
-        panels: newPanels,
+    } else {
+      // Move tasks between panels
+      const newStartTaskIds = [...startPanel.taskIds];
+      newStartTaskIds.splice(source.index, 1);
+      const newStartPanel: IPanel = {
+        ...startPanel,
+        taskIds: newStartTaskIds,
       };
 
-      // Save current project to store
-      saveProject(newCurrentProject);
+      const newFinishTaskIds = [...finishPanel.taskIds];
+      newFinishTaskIds.splice(destination.index, 0, draggableId);
+      const newFinishPanel: IPanel = {
+        ...finishPanel,
+        taskIds: newFinishTaskIds,
+      };
 
-      return newCurrentProject;
-    });
+      setCurrentProject((prevCurrentProject: Project) => {
+        const newPanels = prevCurrentProject.panels.map((panel: IPanel) => {
+          if (panel.id === newStartPanel.id) {
+            return newStartPanel;
+          }
+
+          if (panel.id === newFinishPanel.id) {
+            return newFinishPanel;
+          }
+
+          return panel;
+        });
+
+        const newCurrentProject = {
+          ...prevCurrentProject,
+          panels: newPanels,
+        };
+
+        // Save current project to store
+        saveProject(newCurrentProject);
+
+        return newCurrentProject;
+      });
+    }
   };
 
   // Initialize project grid if currentProjectId exists in store
