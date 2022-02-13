@@ -1,9 +1,8 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Layout from "../sections/Layout/Layout";
-import ProjectContext, { ProjectInterface } from "./../contexts/ProjectContext";
+import ProjectContext, { ProjectContextInterface } from "../contexts/ProjectContext";
 import useProject from "./../hooks/use-project";
-import { useEffect } from "react";
 
 const SafeHydrate: React.FC = ({ children }) => {
   return <div suppressHydrationWarning>{typeof window === "undefined" ? null : children}</div>;
@@ -11,7 +10,7 @@ const SafeHydrate: React.FC = ({ children }) => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { currentProject, setCurrentProject } = useProject();
-  const projectContext: ProjectInterface = {
+  const projectContext: ProjectContextInterface = {
     currentProject,
     setCurrentProject,
   };

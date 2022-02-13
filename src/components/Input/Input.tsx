@@ -11,7 +11,7 @@ interface Props {
 const Input: React.FC<Props> = ({ className, onChange, onFocus, value, disabled, ...props }) => {
   return (
     <input
-      className={`${className} w-full`}
+      className={`${className} w-full outline-none`}
       onChange={onChange}
       onFocus={onFocus}
       value={value}
