@@ -28,6 +28,14 @@ export interface Project {
 
 const UseStore = () => {
   const generateId = (): string => uidgen.generateSync();
+  const generatePanel = (title: string): Panel => {
+    const id = generateId();
+    return {
+      id,
+      title,
+      taskIds: [],
+    };
+  };
 
   const setCurrentProjectId = (id: string): void => {
     Cookies.set("currentProjectId", id);
@@ -54,20 +62,18 @@ const UseStore = () => {
   const addNewProject = (name: string): Project => {
     const projectsStr = Cookies.get("projects") || "[]";
     const newProjects: Project[] = JSON.parse(projectsStr);
-    const panelId = generateId();
+
+    const newPanels: Panel[] = ["Backlog", "Tasks", "Bugs", "In Progress", "Testing", "Done"].map(
+      (title) => generatePanel(title),
+    );
+    const newPanelOrder: string[] = newPanels.map(({ id }) => id);
 
     const newProject: Project = {
       id: generateId(),
       name,
       tasks: [],
-      panels: [
-        {
-          id: panelId,
-          title: "Backlog",
-          taskIds: [],
-        },
-      ],
-      panelOrder: [panelId],
+      panels: newPanels,
+      panelOrder: newPanelOrder,
     };
 
     newProjects.push(newProject);
