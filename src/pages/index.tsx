@@ -4,7 +4,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 
 import Grid from "./../components/Grid/Grid";
 
-import useStore, { Project, Task } from "./../hooks/use-store";
+import useStore, { Project, Task, Panel as IPanel } from "./../hooks/use-store";
 import ProjectContext from "../contexts/ProjectContext";
 import Panel from "./../sections/Panel/Panel";
 
@@ -33,21 +33,69 @@ const Home: NextPage = () => {
       return;
     }
 
-    const panel = currentProject.panels.find((panel) => panel.id === source.droppableId);
-    const newTaskIds = [...(panel?.taskIds || [])];
-    newTaskIds.splice(source.index, 1);
-    newTaskIds.splice(destination.index, 0, draggableId);
+    const startPanel = currentProject.panels.find((panel) => panel.id === source.droppableId);
+    const finishPanel = currentProject.panels.find((panel) => panel.id === destination.droppableId);
 
-    setCurrentProject((prevCurrentProject: any) => {
-      const newPanel = {
-        ...panel,
-        taskIds: newTaskIds,
-      };
+    // TODO: create helper class for array.find()
+    if (!startPanel) throw new TypeError(`Panel does not exist.`);
+    if (!finishPanel) throw new TypeError(`Panel does not exist.`);
 
-      const newPanels = prevCurrentProject.panels.map((panel: any) => {
-        if (panel.id === newPanel.id) {
-          return newPanel;
+    // Move tasks within the same panel
+    if (startPanel.id === finishPanel.id) {
+      const newTaskIds = [...startPanel.taskIds];
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, draggableId);
+
+      setCurrentProject((prevCurrentProject: Project) => {
+        const newPanel = {
+          ...startPanel,
+          taskIds: newTaskIds,
+        };
+
+        const newPanels = prevCurrentProject.panels.map((panel: IPanel) => {
+          if (panel.id === newPanel.id) {
+            return newPanel;
+          }
+          return panel;
+        });
+
+        const newCurrentProject = {
+          ...prevCurrentProject,
+          panels: newPanels,
+        };
+
+        // Save current project to store
+        saveProject(newCurrentProject);
+
+        return newCurrentProject;
+      });
+    }
+
+    // Move tasks between panels
+    const newStartTaskIds = [...startPanel.taskIds];
+    newStartTaskIds.splice(source.index, 1);
+    const newStartPanel: IPanel = {
+      ...startPanel,
+      taskIds: newStartTaskIds,
+    };
+
+    const newFinishTaskIds = [...finishPanel.taskIds];
+    newFinishTaskIds.splice(destination.index, 0, draggableId);
+    const newFinishPanel: IPanel = {
+      ...finishPanel,
+      taskIds: newFinishTaskIds,
+    };
+
+    setCurrentProject((prevCurrentProject: Project) => {
+      const newPanels = prevCurrentProject.panels.map((panel: IPanel) => {
+        if (panel.id === newStartPanel.id) {
+          return newStartPanel;
         }
+
+        if (panel.id === newFinishPanel.id) {
+          return newFinishPanel;
+        }
+
         return panel;
       });
 
@@ -79,11 +127,16 @@ const Home: NextPage = () => {
       <Grid className="flex gap-20">
         <DragDropContext onDragEnd={(result) => handleDragEnd(result, currentProject)}>
           {currentProject &&
-            currentProject.panels.map(({ title, id, taskIds }) => {
-              // TODO: Map out the panelOrder instead of the panel directly.
+            currentProject.panelOrder.map((panelId) => {
+              // TODO: create helper class for array.find()
+              const panel = currentProject.panels.find(({ id }) => id === panelId);
+
+              if (!panel)
+                // ! if Panel does not exist, remove panelId from panelOrder
+                throw new TypeError(`Panel with panelId ${panelId} does not exist.`);
 
               // get tasks from current project
-              const tasks: Task[] = taskIds.map<Task>((taskId): Task => {
+              const tasks: Task[] = panel.taskIds.map<Task>((taskId): Task => {
                 let task = currentProject.tasks.find((task) => task.id === taskId);
 
                 if (!task)
@@ -95,13 +148,12 @@ const Home: NextPage = () => {
 
               return (
                 <Panel
-                  key={id}
-                  id={id}
-                  title={title}
+                  key={panel.id}
                   className="bg-red-100"
                   projectId={currentProject.id}
                   tasks={tasks}
-                  canAddCard={title === "Backlog"}
+                  canAddCard={panel.title === "Backlog"}
+                  panel={panel}
                   onTaskAdded={handleOnTaskAdded}
                   onTaskRemoved={handleOnTaskRemoved}
                 />

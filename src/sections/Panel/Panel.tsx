@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import CardTask from "../../components/CardTask/CardTask";
 import InputInline from "../../components/InputInline/InputInline";
-import useStore, { Task } from "./../../hooks/use-store";
+import useStore, { Task, Panel as IPanel } from "./../../hooks/use-store";
 
 interface Props {
   className?: string;
-  id: string;
-  title?: string;
   canAddCard?: boolean;
   projectId: string;
   tasks: Task[] | [];
+  panel: IPanel;
   onTaskAdded: (task: Task) => void;
   onTaskRemoved: (id: string) => void;
 }
@@ -20,9 +19,8 @@ const Panel: React.FC<Props> = ({
   className,
   canAddCard = false,
   projectId,
-  title = "Panel Name",
   tasks,
-  id,
+  panel,
 
   onTaskAdded,
   onTaskRemoved,
@@ -36,14 +34,14 @@ const Panel: React.FC<Props> = ({
   };
 
   const handleAddTaskClick = (): void => {
-    const newTask = addNewTask(cardTitle, projectId, id);
+    const newTask = addNewTask(cardTitle, projectId, panel.id);
     onTaskAdded(newTask);
 
     reset();
   };
 
   const handleRemoveTaskClick = (taskId: string): void => {
-    removeTask(projectId, id, taskId);
+    removeTask(projectId, panel.id, taskId);
 
     onTaskRemoved(taskId);
   };
@@ -56,7 +54,7 @@ const Panel: React.FC<Props> = ({
 
   return (
     <div className={`${className} flex flex-col gap-20 p-10 min-w-[330px]`} {...props}>
-      <h2 className="text-24">{title}</h2>
+      <h2 className="text-24">{panel.title}</h2>
       {canAddCard && (
         <InputInline
           buttonText="Add"
@@ -66,10 +64,10 @@ const Panel: React.FC<Props> = ({
           value={cardTitle}
         />
       )}
-      <Droppable droppableId={id}>
+      <Droppable droppableId={panel.id}>
         {(provided) => (
           <div
-            className="flex flex-col gap-10"
+            className="flex flex-col flex-grow gap-10 min-h-[100px]"
             ref={provided.innerRef}
             {...provided.droppableProps}>
             {tasks.map((task, i) => (

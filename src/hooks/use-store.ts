@@ -63,6 +63,7 @@ const UseStore = () => {
     const projectsStr = Cookies.get("projects") || "[]";
     const newProjects: Project[] = JSON.parse(projectsStr);
 
+    // TODO: Move default panel constants in a config file.
     const newPanels: Panel[] = ["Backlog", "Tasks", "Bugs", "In Progress", "Testing", "Done"].map(
       (title) => generatePanel(title),
     );
