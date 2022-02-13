@@ -54,7 +54,7 @@ const Panel: React.FC<Props> = ({
 
   return (
     <div
-      className={`${className} flex flex-col gap-20 p-10 min-w-[330px] rounded-sm bg-paper-100 mb-10`}
+      className={`${className} flex flex-col gap-20 p-10 min-w-[330px] rounded-sm bg-paper-100 mb-10 shadow-sm border border-wood`}
       {...props}>
       <h2 className="text-24">{panel.title}</h2>
       {canAddCard && (

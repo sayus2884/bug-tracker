@@ -11,7 +11,7 @@ const Layout: React.FC = ({ children }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Nav className="absolute w-full h-64 px-25 bg-wood text-white fixed" />
+      <Nav className="absolute w-full h-64 px-25 bg-wood-500 text-white fixed" />
 
       <main className="pt-64 h-full bg-paper h-screen">
         <div className="py-15 px-45 h-full overflow-auto">
