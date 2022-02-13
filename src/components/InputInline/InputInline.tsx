@@ -29,9 +29,9 @@ const InputInline: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex">
+    <div className="flex rounded overflow-hidden">
       <Input
-        className={`${className} w-full px-2 outline-none`}
+        className={`${className} px-2`}
         onChange={handleInputChange}
         value={value}
         disabled={inputDisabled}

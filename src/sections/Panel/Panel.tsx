@@ -53,7 +53,9 @@ const Panel: React.FC<Props> = ({
   const isCardTitleMinChar = cardTitle.length >= 3;
 
   return (
-    <div className={`${className} flex flex-col gap-20 p-10 min-w-[330px]`} {...props}>
+    <div
+      className={`${className} flex flex-col gap-20 p-10 min-w-[330px] rounded-sm bg-paper-100 mb-10`}
+      {...props}>
       <h2 className="text-24">{panel.title}</h2>
       {canAddCard && (
         <InputInline
@@ -67,11 +69,17 @@ const Panel: React.FC<Props> = ({
       <Droppable droppableId={panel.id}>
         {(provided) => (
           <div
-            className="flex flex-col flex-grow gap-10 min-h-[100px]"
+            className="flex flex-col flex-grow min-h-[100px] overflow-auto"
             ref={provided.innerRef}
             {...provided.droppableProps}>
             {tasks.map((task, i) => (
-              <CardTask index={i} key={task.id} onRemoveTask={handleRemoveTaskClick} {...task} />
+              <CardTask
+                className="mb-10"
+                index={i}
+                key={task.id}
+                onRemoveTask={handleRemoveTaskClick}
+                {...task}
+              />
             ))}
             {provided.placeholder}
           </div>

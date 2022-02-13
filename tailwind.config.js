@@ -18,6 +18,9 @@ module.exports = {
         gum: "#D15362",
         blackberry: "#1B202F",
         grape: "#211d24",
+        wood: "#463123",
+        paper: "#fffcf4",
+        "paper-100": "#f3e8d0",
       },
       spacing: {
         orbit: "1000px",

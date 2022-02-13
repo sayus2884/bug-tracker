@@ -15,5 +15,30 @@ body {
 }
 
 .color-picker {
-  color: #211d24;
+  color: #463123;
+}
+
+*::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 9999px;
+  padding: 10px;
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(70, 49, 35, 0.2);
+  border-radius: 9999px;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background: rgb(70, 49, 35, 0.8);
+}
+
+.branding-img-container {
+  opacity: 0;
 }

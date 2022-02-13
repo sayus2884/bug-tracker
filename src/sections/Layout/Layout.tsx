@@ -6,15 +6,17 @@ const Layout: React.FC = ({ children }) => {
   return (
     <div>
       <Head>
-        <title>Under Construction</title>
+        <title>Bug Tracker</title>
         <meta name="description" content="Bug tracker made with NextJS" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Nav className="absolute w-full h-64 px-25 bg-grape text-white fixed" />
+      <Nav className="absolute w-full h-64 px-25 bg-wood text-white fixed" />
 
-      <main className="pt-64 h-full bg-gray-50">
-        <div className="py-15 px-45 h-full overflow-auto">{children}</div>
+      <main className="pt-64 h-full bg-paper h-screen">
+        <div className="py-15 px-45 h-full overflow-auto">
+          <div className="overflow-auto h-full rounded">{children}</div>
+        </div>
       </main>
     </div>
   );

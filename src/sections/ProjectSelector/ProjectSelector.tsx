@@ -63,40 +63,38 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
 
   return (
     <div className="relative inline-block text-left w-300" ref={containerRef}>
-      <div>
-        <div
-          className={`inline-flex justify-between w-full ${
-            isOpen && isOptionsAvailable ? "rounded-t-md" : "rounded-md"
-          } border border-gray-300 shadow-sm bg-white text-sm font-medium text-gray-700 overflow-hidden`}
-          aria-expanded="true"
-          aria-haspopup="true">
-          <Input
-            className="outline:none px-4 py-2"
-            onFocus={open}
-            onChange={handleProjectInputChange}
-            value={selectedOptionName}
-          />
+      <div
+        className={`inline-flex justify-between w-full ${
+          isOpen && isOptionsAvailable ? "rounded-t" : "rounded"
+        } border border-gray-300 shadow-sm bg-white text-sm font-medium text-gray-700 overflow-hidden`}
+        aria-expanded="true"
+        aria-haspopup="true">
+        <Input
+          className="outline:none px-4 py-2"
+          onFocus={open}
+          onChange={handleProjectInputChange}
+          value={selectedOptionName}
+        />
 
-          {(isOpen || !isOptionsAvailable) && (
-            <button
-              className="hover:bg-red-100 px-4 py-1 disabled:opacity-50"
-              onClick={handleAddProject}
-              disabled={!isSelectedOptionNameAvailable}>
-              <Plus size={20} weight="bold" />
-            </button>
-          )}
+        {(isOpen || !isOptionsAvailable) && (
+          <button
+            className="hover:bg-red-100 px-4 py-1 disabled:opacity-50"
+            onClick={handleAddProject}
+            disabled={!isSelectedOptionNameAvailable}>
+            <Plus size={20} weight="bold" />
+          </button>
+        )}
 
-          {!isOpen && isOptionsAvailable && (
-            <button className="hover:bg-red-100 px-4 py-1" onClick={open}>
-              <CaretDown size={20} weight="bold" />
-            </button>
-          )}
-        </div>
+        {!isOpen && isOptionsAvailable && (
+          <button className="hover:bg-red-100 px-4 py-1" onClick={open}>
+            <CaretDown size={20} weight="bold" />
+          </button>
+        )}
       </div>
 
       {isOpen && isOptionsAvailable && (
         <div
-          className="origin-top-right absolute right-0 w-300 rounded-b-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-50"
+          className="origin-top-right absolute right-0 w-300 rounded-b shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none z-50"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="menu-button">

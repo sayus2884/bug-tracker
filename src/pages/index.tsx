@@ -149,7 +149,6 @@ const Home: NextPage = () => {
               return (
                 <Panel
                   key={panel.id}
-                  className="bg-red-100"
                   projectId={currentProject.id}
                   tasks={tasks}
                   canAddCard={panel.title === "Backlog"}

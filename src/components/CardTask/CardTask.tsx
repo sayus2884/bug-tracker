@@ -39,17 +39,20 @@ const CardTask: React.FC<Props> = ({
     <Draggable draggableId={id} index={index}>
       {(provided) => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-          <Card className="relative bg-red-500 min-h-[150px]">
+          <Card
+            className={`${className} relative flex flex-col bg-paper min-h-[150px] rounded overflow-hidden`}>
             <div>
               <div className="absolute bg-blue-500 h-10 w-50 top-0 left-0"></div>
             </div>
-            <p className="relative top-10 h-full">{title}</p>
+            <p className="relative top-10 flex-grow ">{title}</p>
 
             <div className="flex justify-between items-center">
               <p>{branch}</p>
 
-              <Button className="bg-red-400 p-8 rounded" onClick={handleRemoveTaskClick}>
-                <Trash size={20} />
+              <Button
+                className="p-[3px] rounded text-wood opacity-50 hover:text-red-400 hover:opacity-100"
+                onClick={handleRemoveTaskClick}>
+                <Trash size={24} />
               </Button>
 
               {false && (

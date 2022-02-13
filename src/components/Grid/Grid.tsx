@@ -6,7 +6,7 @@ interface Props {
 
 const Grid: React.FC<Props> = ({ children, className, ...props }) => {
   return (
-    <div className={`${className} bg-red-50 h-full`} {...props}>
+    <div className={`${className} h-full`} {...props}>
       {children}
     </div>
   );
