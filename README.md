@@ -24,11 +24,11 @@ With the basic layout and design laid out, it's time to program the basic featur
 - [x] Add tasks in respective project
 - [x] Remove tasks from respective project
 - [x] Storing project data
+- [x] Moving tasks from one panel to the next
 - [ ] Setting and storing card properties
   - [ ] priority
   - [ ] description
   - [ ] type
-- [ ] Moving tasks from one panel to the next
 
 Now, the overall aesthetics isn't going to be pretty but the app itself does work. You can go ahead and clone the project or visit the app [here](https://bug-tracker-delta.vercel.app/). The marked out features are ready to go.
 
