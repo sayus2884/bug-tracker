@@ -1,13 +1,19 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 import { Project } from "../hooks/use-store";
 
-export interface ProjectInterface {
-  currentProject?: Project;
+export interface ProjectContextInterface {
+  currentProject: Project;
   setCurrentProject: any;
 }
 
-const ProjectContext = createContext<ProjectInterface>({
-  currentProject: undefined,
+const ProjectContext = createContext<ProjectContextInterface>({
+  currentProject: {
+    id: "",
+    name: "",
+    tasks: [],
+    panels: [],
+    panelOrder: [],
+  },
   setCurrentProject: () => {},
 });
 

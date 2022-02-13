@@ -5,17 +5,25 @@ const uidgen = new UIDGenerator(64);
 
 export interface Task {
   id: string;
+  title: string;
   description: string;
   branch: string;
   type: string;
   priority: number;
-  panel: string;
 }
+
+export interface Panel {
+  id: string;
+  title: string;
+  taskIds: string[];
+}
+
 export interface Project {
   id: string;
   name: string;
   tasks: Task[];
-  panels: string[];
+  panels: Panel[];
+  panelOrder: string[];
 }
 
 const UseStore = () => {
@@ -46,12 +54,20 @@ const UseStore = () => {
   const addNewProject = (name: string): Project => {
     const projectsStr = Cookies.get("projects") || "[]";
     const newProjects: Project[] = JSON.parse(projectsStr);
+    const panelId = generateId();
 
     const newProject: Project = {
       id: generateId(),
       name,
       tasks: [],
-      panels: ["Backlog", "To do", "Bugs", "In Progress", "Testing", "Done"],
+      panels: [
+        {
+          id: panelId,
+          title: "Backlog",
+          taskIds: [],
+        },
+      ],
+      panelOrder: [panelId],
     };
 
     newProjects.push(newProject);
@@ -61,30 +77,78 @@ const UseStore = () => {
     return newProject;
   };
 
-  const addNewTask = (projectId: string, task: Task): void => {
+  const saveProject = (newProject: Project): void => {
+    const newProjects: Project[] = getProjects().map((project) => {
+      return project.id === newProject.id ? newProject : project;
+    });
+
+    Cookies.set("projects", JSON.stringify(newProjects));
+  };
+
+  const addNewTask = (title: string, projectId: string, panelId: string): Task => {
+    const taskId = generateId();
+    const newTask: Task = {
+      id: taskId,
+      title,
+      description: "",
+      branch: "",
+      type: "",
+      priority: 0,
+    };
+
+    // Create new array of modified projects
     const modifiedProjects = getProjects().map((project) => {
       if (project.id !== projectId) {
         return project;
       }
 
+      // Add task
       const newTasks = project.tasks;
-      newTasks.push(task);
+      newTasks.push(newTask);
 
-      return project;
+      // Add taskId to panel
+      const panels = project.panels.map((panel) => {
+        if (panel.id === panelId) {
+          panel.taskIds.push(taskId);
+        }
+
+        return panel;
+      });
+
+      const newProject = {
+        ...project,
+        panels,
+      };
+
+      return newProject;
     });
 
     Cookies.set("projects", JSON.stringify(modifiedProjects));
+
+    return newTask;
   };
 
-  const removeTask = (projectId: string, taskId: string): void => {
+  const removeTask = (projectId: string, panelId: string, taskId: string): void => {
     const modifiedProjects = getProjects().map((project) => {
       if (project.id !== projectId) {
         return project;
       }
 
+      // remove task from tasks array
       const modifiedTasks = project.tasks.filter(({ id }) => id !== taskId);
 
-      return { ...project, tasks: modifiedTasks };
+      // remove taskId from panel
+      const panels = project.panels.map((panel) => {
+        if (panel.id === panelId) {
+          panel.taskIds = panel.taskIds.filter((id) => id !== taskId);
+        }
+
+        return panel;
+      });
+
+      const newProject = { ...project, tasks: modifiedTasks, panels };
+
+      return newProject;
     });
 
     Cookies.set("projects", JSON.stringify(modifiedProjects));
@@ -98,6 +162,7 @@ const UseStore = () => {
     getProjects,
     getProject,
     addNewProject,
+    saveProject,
     generateId,
   };
 };
