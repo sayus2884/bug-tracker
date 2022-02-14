@@ -9,7 +9,7 @@ export interface Task {
   description: string;
   branch: string;
   type: string;
-  priority: number;
+  priority: string;
 }
 
 export interface Panel {
@@ -100,7 +100,7 @@ const UseStore = () => {
       description: "",
       branch: "",
       type: "",
-      priority: 0,
+      priority: "bg-blue-500",
     };
 
     // Create new array of modified projects
@@ -161,16 +161,35 @@ const UseStore = () => {
     Cookies.set("projects", JSON.stringify(modifiedProjects));
   };
 
+  const editTaskPriority = (projectId: string, taskId: string, color: string) => {
+    const project = getProject(projectId);
+
+    const newTasks = project.tasks.map((task) => {
+      if (task.id === taskId) {
+        return { ...task, priority: color };
+      }
+      return task;
+    });
+
+    const modifiedProject: Project = {
+      ...project,
+      tasks: newTasks,
+    };
+
+    saveProject(modifiedProject);
+  };
+
   return {
     setCurrentProjectId,
     getCurrentProjectId,
-    addNewTask,
-    removeTask,
     getProjects,
     getProject,
     addNewProject,
     saveProject,
     generateId,
+    addNewTask,
+    removeTask,
+    editTaskPriority,
   };
 };
 

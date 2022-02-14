@@ -62,7 +62,7 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
   useOutsideObserver(containerRef, () => close());
 
   return (
-    <div className="relative inline-block text-left w-300" ref={containerRef}>
+    <div className="relative text-left w-300" ref={containerRef}>
       <div
         className={`inline-flex justify-between w-full ${
           isOpen && isOptionsAvailable ? "rounded-t" : "rounded"

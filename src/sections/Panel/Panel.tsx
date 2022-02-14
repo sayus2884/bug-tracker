@@ -77,6 +77,7 @@ const Panel: React.FC<Props> = ({
                 className="mb-10"
                 index={i}
                 key={task.id}
+                projectId={projectId}
                 onRemoveTask={handleRemoveTaskClick}
                 {...task}
               />
