@@ -63,34 +63,36 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
 
   return (
     <div className="relative text-left w-300" ref={containerRef}>
-      <div
-        className={`inline-flex justify-between w-full ${
-          isOpen && isOptionsAvailable ? "rounded-t" : "rounded"
-        } border border-gray-300 shadow-sm bg-white text-sm font-medium text-gray-700 overflow-hidden`}
-        aria-expanded="true"
-        aria-haspopup="true">
-        <Input
-          className="outline:none px-4 py-2"
-          onFocus={open}
-          onChange={handleProjectInputChange}
-          value={selectedOptionName}
-        />
+      <form onSubmit={handleAddProject}>
+        <div
+          className={`inline-flex justify-between w-full ${
+            isOpen && isOptionsAvailable ? "rounded-t" : "rounded"
+          } border border-gray-300 shadow-sm bg-white text-sm font-medium text-gray-700 overflow-hidden`}
+          aria-expanded="true"
+          aria-haspopup="true">
+          <Input
+            className="outline:none px-4 py-2"
+            onFocus={open}
+            onChange={handleProjectInputChange}
+            value={selectedOptionName}
+          />
 
-        {(isOpen || !isOptionsAvailable) && (
-          <button
-            className="hover:bg-red-100 px-4 py-1 disabled:opacity-50"
-            onClick={handleAddProject}
-            disabled={!isSelectedOptionNameAvailable}>
-            <Plus size={20} weight="bold" />
-          </button>
-        )}
+          {(isOpen || !isOptionsAvailable) && (
+            <button
+              className="hover:bg-paper-100/60 px-4 py-1 disabled:opacity-50"
+              onClick={handleAddProject}
+              disabled={!isSelectedOptionNameAvailable}>
+              <Plus size={20} weight="bold" />
+            </button>
+          )}
 
-        {!isOpen && isOptionsAvailable && (
-          <button className="hover:bg-red-100 px-4 py-1" onClick={open}>
-            <CaretDown size={20} weight="bold" />
-          </button>
-        )}
-      </div>
+          {!isOpen && isOptionsAvailable && (
+            <button className="hover:bg-paper-100/60 px-4 py-1" onClick={open}>
+              <CaretDown size={20} weight="bold" />
+            </button>
+          )}
+        </div>
+      </form>
 
       {isOpen && isOptionsAvailable && (
         <div
@@ -103,7 +105,7 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
               <button
                 key={i}
                 onClick={() => handleOptionSelected(id, name)}
-                className="text-gray-700 block px-4 py-2 text-sm text-left w-full hover:bg-red-100">
+                className="text-gray-700 block px-4 py-2 text-sm text-left w-full hover:bg-paper-100/60">
                 {name}
               </button>
             ))}

@@ -33,10 +33,9 @@ const Panel: React.FC<Props> = ({
     setCardTitle(event.target.value);
   };
 
-  const handleAddTaskClick = (): void => {
+  const handleAddTaskClick = () => {
     const newTask = addNewTask(cardTitle, projectId, panel.id);
     onTaskAdded(newTask);
-
     reset();
   };
 
@@ -58,13 +57,15 @@ const Panel: React.FC<Props> = ({
       {...props}>
       <h2 className="text-24">{panel.title}</h2>
       {canAddCard && (
-        <InputInline
-          buttonText="Add"
-          onChange={handleCardTitleInputChange}
-          onClick={handleAddTaskClick}
-          buttonDisabled={!isCardTitleMinChar}
-          value={cardTitle}
-        />
+        <form onSubmit={handleAddTaskClick}>
+          <InputInline
+            buttonText="Add"
+            onChange={handleCardTitleInputChange}
+            onClick={handleAddTaskClick}
+            buttonDisabled={!isCardTitleMinChar}
+            value={cardTitle}
+          />
+        </form>
       )}
       <Droppable droppableId={panel.id}>
         {(provided) => (

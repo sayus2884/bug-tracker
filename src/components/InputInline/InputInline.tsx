@@ -37,7 +37,10 @@ const InputInline: React.FC<Props> = ({
         disabled={inputDisabled}
         {...props}
       />
-      <Button className="px-3 py-2 bg-red-300" onClick={onClick} disabled={buttonDisabled}>
+      <Button
+        className="px-3 py-2 bg-wood-500/10 hover:bg-paper/60"
+        onClick={onClick}
+        disabled={buttonDisabled}>
         {buttonText}
       </Button>
     </div>
