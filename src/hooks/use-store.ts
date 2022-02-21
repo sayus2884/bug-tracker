@@ -161,6 +161,24 @@ const UseStore = () => {
     Cookies.set("projects", JSON.stringify(modifiedProjects));
   };
 
+  const editTaskTitle = (projectId: string, taskId: string, title: string) => {
+    const project = getProject(projectId);
+
+    const newTasks = project.tasks.map((task) => {
+      if (task.id === taskId) {
+        return { ...task, title };
+      }
+      return task;
+    });
+
+    const modifiedProject: Project = {
+      ...project,
+      tasks: newTasks,
+    };
+
+    saveProject(modifiedProject);
+  };
+
   const editTaskPriority = (projectId: string, taskId: string, color: string) => {
     const project = getProject(projectId);
 
@@ -190,6 +208,7 @@ const UseStore = () => {
     addNewTask,
     removeTask,
     editTaskPriority,
+    editTaskTitle,
   };
 };
 

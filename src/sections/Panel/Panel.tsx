@@ -27,7 +27,7 @@ const Panel: React.FC<Props> = ({
   ...props
 }) => {
   const [cardTitle, setCardTitle] = useState("");
-  const { addNewTask, removeTask } = useStore();
+  const { addNewTask, removeTask, editTaskTitle } = useStore();
 
   const handleCardTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCardTitle(event.target.value);
