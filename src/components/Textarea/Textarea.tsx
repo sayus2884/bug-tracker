@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef } from "react";
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -19,5 +19,7 @@ const Textarea = forwardRef(
     );
   },
 );
+
+Textarea.displayName = "Textarea";
 
 export default Textarea;
