@@ -1,9 +1,13 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
+
 import Layout from "../sections/Layout/Layout";
+
 import ProjectContext, { ProjectContextInterface } from "../contexts/ProjectContext";
+
 import useProject from "./../hooks/use-project";
 
+// Safe Hydrate removes SSR
 const SafeHydrate: React.FC = ({ children }) => {
   return <div suppressHydrationWarning>{typeof window === "undefined" ? null : children}</div>;
 };

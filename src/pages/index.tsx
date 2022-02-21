@@ -8,6 +8,10 @@ import useStore, { Project, Task, Panel as IPanel } from "./../hooks/use-store";
 import ProjectContext from "../contexts/ProjectContext";
 import Panel from "./../sections/Panel/Panel";
 
+import dynamic from "next/dynamic";
+
+const PouchDBContext = dynamic(() => import("../components/PouchDB/PouchDB"), { ssr: false });
+
 const Home: NextPage = () => {
   const { getCurrentProjectId, getProject, saveProject } = useStore();
   const { currentProject, setCurrentProject } = useContext(ProjectContext);
@@ -124,42 +128,44 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Grid className="flex gap-20">
-        <DragDropContext onDragEnd={(result) => handleDragEnd(result, currentProject)}>
-          {currentProject &&
-            currentProject.panelOrder.map((panelId) => {
-              // TODO: create helper class for array.find()
-              const panel = currentProject.panels.find(({ id }) => id === panelId);
+      <PouchDBContext>
+        <Grid className="flex gap-20">
+          <DragDropContext onDragEnd={(result) => handleDragEnd(result, currentProject)}>
+            {currentProject &&
+              currentProject.panelOrder.map((panelId) => {
+                // TODO: create helper class for array.find()
+                const panel = currentProject.panels.find(({ id }) => id === panelId);
 
-              if (!panel)
-                // ! if Panel does not exist, remove panelId from panelOrder
-                throw new TypeError(`Panel with panelId ${panelId} does not exist.`);
+                if (!panel)
+                  // ! if Panel does not exist, remove panelId from panelOrder
+                  throw new TypeError(`Panel with panelId ${panelId} does not exist.`);
 
-              // get tasks from current project
-              const tasks: Task[] = panel.taskIds.map<Task>((taskId): Task => {
-                let task = currentProject.tasks.find((task) => task.id === taskId);
+                // get tasks from current project
+                const tasks: Task[] = panel.taskIds.map<Task>((taskId): Task => {
+                  let task = currentProject.tasks.find((task) => task.id === taskId);
 
-                if (!task)
-                  // ! if Task does not exist, remove taskId from panel's taskIds
-                  throw new TypeError(`Task with taskId ${taskId} does not exist.`);
+                  if (!task)
+                    // ! if Task does not exist, remove taskId from panel's taskIds
+                    throw new TypeError(`Task with taskId ${taskId} does not exist.`);
 
-                return task;
-              });
+                  return task;
+                });
 
-              return (
-                <Panel
-                  key={panel.id}
-                  projectId={currentProject.id}
-                  tasks={tasks}
-                  canAddCard={panel.title === "Backlog"}
-                  panel={panel}
-                  onTaskAdded={handleOnTaskAdded}
-                  onTaskRemoved={handleOnTaskRemoved}
-                />
-              );
-            })}
-        </DragDropContext>
-      </Grid>
+                return (
+                  <Panel
+                    key={panel.id}
+                    projectId={currentProject.id}
+                    tasks={tasks}
+                    canAddCard={panel.title === "Backlog"}
+                    panel={panel}
+                    onTaskAdded={handleOnTaskAdded}
+                    onTaskRemoved={handleOnTaskRemoved}
+                  />
+                );
+              })}
+          </DragDropContext>
+        </Grid>
+      </PouchDBContext>
     </>
   );
 };
