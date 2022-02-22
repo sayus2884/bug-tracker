@@ -11,9 +11,10 @@ import DropdownOptions, {
   DropdownOptionEvent,
 } from "./../DropdownOptions/DropdownOptions";
 
-import useStore, { Task } from "./../../hooks/use-store";
+import useStore from "./../../hooks/use-store";
+import { Task } from "./../../utils/types";
 import useOutsideObserver from "./../../hooks/use-outside-observer";
-import ProjectContext from "../../contexts/ProjectContext";
+import { useProjectContext } from "../../contexts/ProjectContext";
 
 interface Props extends Task {
   className?: string;
@@ -43,7 +44,7 @@ const colorOptions: DropdownOption[] = [
 
 const CardTask: React.FC<Props> = ({
   className,
-  id,
+  _id,
   title,
   description,
   branch,
@@ -56,7 +57,7 @@ const CardTask: React.FC<Props> = ({
   ...props
 }) => {
   const { editTaskPriority, editTaskTitle, getProject } = useStore();
-  const { setCurrentProject } = useContext(ProjectContext);
+  const { setCurrentProject } = useProjectContext();
   const [isPrioritySelectionOpen, setIsPrioritySelectionOpen] = useState(false);
   const [titleInput, setTitleInput] = useState(title);
   const [isEditable, setIsEditable] = useState(false);
@@ -68,7 +69,7 @@ const CardTask: React.FC<Props> = ({
   };
 
   const handleRemoveTaskClick = () => {
-    onRemoveTask(id);
+    onRemoveTask(_id);
   };
 
   const handlePriorityToggle = () => {
@@ -76,7 +77,7 @@ const CardTask: React.FC<Props> = ({
   };
 
   const handlePrioritySelected = (option: DropdownOptionEvent) => {
-    editTaskPriority(projectId, id, option.value);
+    editTaskPriority(projectId, _id, option.value);
     setCurrentProject(getProject(projectId));
 
     closePrioritySelector();
@@ -102,7 +103,7 @@ const CardTask: React.FC<Props> = ({
     setIsEditable(false);
 
     if (title !== titleInput) {
-      editTaskTitle(projectId, id, titleInput);
+      editTaskTitle(projectId, _id, titleInput);
     }
   };
 
@@ -118,7 +119,7 @@ const CardTask: React.FC<Props> = ({
 
   //TODO: enable button for take feature.
   return (
-    <Draggable draggableId={id} index={index}>
+    <Draggable draggableId={_id} index={index}>
       {(provided) => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <Card

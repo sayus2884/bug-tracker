@@ -3,6 +3,7 @@ import { Droppable } from "react-beautiful-dnd";
 import CardTask from "../../components/CardTask/CardTask";
 import InputInline from "../../components/InputInline/InputInline";
 import useDatabase from "../../hooks/use-database";
+import { TASK_DEFAULT } from "../../utils/defaults";
 import useStore from "./../../hooks/use-store";
 import { Task, Panel as IPanel } from "./../../utils/types";
 
@@ -79,9 +80,20 @@ const Panel: React.FC<Props> = ({
             className="flex flex-col flex-grow min-h-[100px] overflow-auto"
             ref={provided.innerRef}
             {...provided.droppableProps}>
-            {tasks.map((task, i) => (
-              <div>add card task here</div>
-            ))}
+            {tasks.map((task, i) => {
+              return task._id === TASK_DEFAULT._id ? (
+                <div key={i}></div>
+              ) : (
+                <CardTask
+                  className="mb-10"
+                  index={i}
+                  key={task._id}
+                  projectId={projectId}
+                  onRemoveTask={handleRemoveTaskClick}
+                  {...task}
+                />
+              );
+            })}
             {provided.placeholder}
           </div>
         )}
@@ -90,14 +102,4 @@ const Panel: React.FC<Props> = ({
   );
 };
 
-{
-  /* <CardTask
-  className="mb-10"
-  index={i}
-  key={task.id}
-  projectId={projectId}
-  onRemoveTask={handleRemoveTaskClick}
-  {...task}
-/> */
-}
 export default Panel;
