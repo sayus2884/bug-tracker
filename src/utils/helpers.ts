@@ -1,4 +1,6 @@
 import React from "react";
+import UIDGenerator from "uid-generator";
+const uidgen = new UIDGenerator(64);
 
 // ? https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/context/
 /**
@@ -13,4 +15,8 @@ export function createCtx<A extends {} | null>() {
     return c;
   }
   return [useCtx, ctx] as const; // 'as const' makes TypeScript infer a tuple
+}
+
+export function generateId(): string {
+  return uidgen.generateSync();
 }

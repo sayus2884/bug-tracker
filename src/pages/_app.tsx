@@ -1,9 +1,11 @@
 import "../styles/globals.css";
+import dynamic from "next/dynamic";
 import type { AppProps } from "next/app";
 
 import Layout from "../sections/Layout/Layout";
 
 import ProjectContext, { ProjectContextInterface } from "../contexts/ProjectContext";
+const PouchDBContext = dynamic(() => import("../components/PouchDB/PouchDB"), { ssr: false });
 
 import useProject from "./../hooks/use-project";
 
@@ -20,13 +22,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   };
 
   return (
-    <ProjectContext.Provider value={projectContext}>
-      <SafeHydrate>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </SafeHydrate>
-    </ProjectContext.Provider>
+    <PouchDBContext>
+      <ProjectContext.Provider value={projectContext}>
+        <SafeHydrate>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </SafeHydrate>
+      </ProjectContext.Provider>
+    </PouchDBContext>
   );
 }
 

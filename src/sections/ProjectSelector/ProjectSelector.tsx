@@ -1,25 +1,27 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { CaretDown, Plus } from "phosphor-react";
 
 import Input from "./../../components/Input/Input";
 
 import useOutsideObserver from "./../../hooks/use-outside-observer";
 import useStore from "./../../hooks/use-store";
-import ProjectContext from "./../../contexts/ProjectContext";
+import useDatabase from "./../../hooks/use-database";
 
+import ProjectContext from "./../../contexts/ProjectContext";
 interface Props {
   className?: string;
 }
 
+// TODO: pass options here
 const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
   const { setCurrentProject } = useContext(ProjectContext);
 
-  const { setCurrentProjectId, getProjects, getProject, addNewProject } = useStore();
+  const { setCurrentProjectId, getProject } = useStore();
+  const { addNewProject, getProjects } = useDatabase();
+
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOptionName, setSelectedOptionName] = useState(
-    getProjects().length > 0 ? getProjects()[0].name : "",
-  );
-  const [options, setOptions] = useState(getProjects());
+  const [selectedOptionName, setSelectedOptionName] = useState("");
+  const [options, setOptions] = useState<{ name: string; value: string }[]>([]);
   const containerRef = useRef(null);
 
   const handleOptionSelected = (id: string, name: string): void => {
@@ -30,15 +32,18 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
     close();
   };
 
-  const handleAddProject = (): void => {
+  const handleAddProject = async (event: React.SyntheticEvent): Promise<void> => {
+    event.preventDefault();
+
     if (options.some(({ name }) => name === selectedOptionName)) {
       return;
     }
 
-    const newProject = addNewProject(selectedOptionName);
-    setCurrentProject(newProject);
-    setCurrentProjectId(newProject.id);
-    setOptions(getProjects());
+    const project = await addNewProject(selectedOptionName);
+
+    // setCurrentProject(newProject);
+    // setCurrentProjectId(newProject.id);
+    // setOptions(getProjects());
 
     close();
   };
@@ -55,11 +60,23 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
     setIsOpen(true);
   };
 
-  const isOptionsAvailable = options.length > 0;
-  const isSelectedOptionNameAvailable =
-    selectedOptionName.length > 3 && !options.some(({ name }) => name === selectedOptionName);
+  // const isOptionsAvailable = options.length > 0;
+  const isOptionsAvailable = true;
+  const isSelectedOptionNameAvailable = false;
+  // const isSelectedOptionNameAvailable =
+  // selectedOptionName.length > 3 && !options.some(({ name }) => name === selectedOptionName);
 
   useOutsideObserver(containerRef, () => close());
+
+  // Initialize project options
+  useEffect(() => {
+    getProjects().then((projects) => {
+      const options: { name: string; value: string }[] = projects.map(({ _id, name }) => {
+        return { value: _id, name };
+      });
+      setOptions(options);
+    });
+  }, []);
 
   return (
     <div className="relative text-left w-300" ref={containerRef}>
@@ -101,10 +118,10 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
           aria-orientation="vertical"
           aria-labelledby="menu-button">
           <div className="py-1" role="none">
-            {options.map(({ id, name }, i) => (
+            {options.map(({ value, name }, i) => (
               <button
                 key={i}
-                onClick={() => handleOptionSelected(id, name)}
+                onClick={() => handleOptionSelected(value, name)}
                 className="text-gray-700 block px-4 py-2 text-sm text-left w-full hover:bg-paper-100/60">
                 {name}
               </button>
