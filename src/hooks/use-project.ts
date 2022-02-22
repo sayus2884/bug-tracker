@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { Project } from "./use-store";
+import { Project } from "../utils/types";
 
 const UseProject = () => {
   const projectDefault: Project = {
-    id: "",
+    _id: "",
     name: "",
-    tasks: [],
-    panels: [],
     panelOrder: [],
   };
   const [currentProject, setCurrentProject] = useState(projectDefault);

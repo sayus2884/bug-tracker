@@ -86,7 +86,17 @@ const UseDatabase = () => {
     return projectsDb.put(project);
   };
 
-  return { getProjects, getProject, addNewProject, saveProject };
+  const getPanels = async (project_id: string) => {
+    const panels = await panelsDb
+      .find({ selector: { project_id } })
+      .then((res) => <Panel[]>res.docs);
+
+    return panels;
+  };
+
+  const addNewTask = async (title: string, project_id: string, panel_id: string) => {};
+
+  return { getProjects, getProject, addNewProject, saveProject, getPanels };
 };
 
 export default UseDatabase;

@@ -1,5 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { Project } from "../hooks/use-store";
+import { Project } from "../utils/types";
 
 export interface ProjectContextInterface {
   currentProject: Project;
@@ -8,10 +8,8 @@ export interface ProjectContextInterface {
 
 const ProjectContext = createContext<ProjectContextInterface>({
   currentProject: {
-    id: "",
+    _id: "",
     name: "",
-    tasks: [],
-    panels: [],
     panelOrder: [],
   },
   setCurrentProject: () => {},

@@ -20,7 +20,6 @@ export interface Panel {
 }
 
 export interface PanelCreate extends Panel {}
-
 export interface Project {
   _id: string;
   _rev?: string;
