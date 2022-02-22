@@ -16,18 +16,23 @@ interface Props {
 const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
   const { setCurrentProject } = useContext(ProjectContext);
 
-  const { setCurrentProjectId, getProject } = useStore();
-  const { addNewProject, getProjects } = useDatabase();
+  const { setCurrentProjectId, getCurrentProjectId } = useStore();
+  const { addNewProject, getProjects, getProject } = useDatabase();
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOptionName, setSelectedOptionName] = useState("");
   const [options, setOptions] = useState<{ name: string; value: string }[]>([]);
   const containerRef = useRef(null);
 
-  const handleOptionSelected = (id: string, name: string): void => {
+  const handleOptionSelected = (projectId: string, name: string): void => {
     setSelectedOptionName(name);
-    setCurrentProject(getProject(id));
-    setCurrentProjectId(id);
+    getProject(projectId).then((project) => {
+      setCurrentProject(project);
+      setCurrentProjectId(projectId);
+    });
+    // TODO: update project state
+
+    // setCurrentProject(getProject(id));
 
     close();
   };
@@ -41,9 +46,7 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
 
     const project = await addNewProject(selectedOptionName);
 
-    // setCurrentProject(newProject);
-    // setCurrentProjectId(newProject.id);
-    // setOptions(getProjects());
+    // TODO: update project state
 
     close();
   };
@@ -70,8 +73,14 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
 
   // Initialize project options
   useEffect(() => {
+    const currentProjectId = getCurrentProjectId();
     getProjects().then((projects) => {
       const options: { name: string; value: string }[] = projects.map(({ _id, name }) => {
+        //set current project name
+        if (_id === currentProjectId) {
+          setSelectedOptionName(name);
+        }
+
         return { value: _id, name };
       });
       setOptions(options);

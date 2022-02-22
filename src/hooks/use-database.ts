@@ -18,7 +18,6 @@ const UseDatabase = () => {
   };
 
   const getProjects = async (): Promise<Project[]> => {
-    console.log("get projects");
     const projects = await projectsDb.allDocs({ include_docs: true }).then((res) => {
       return res.rows.map((row) => <Project>row.doc);
     });
@@ -26,16 +25,16 @@ const UseDatabase = () => {
     return projects;
   };
 
-  const getProject = (id: string) => {
-    console.log("get project", id);
+  const getProject = async (_id: string) => {
+    const project = await projectsDb
+      .find({ selector: { _id } })
+      .then((project) => <Project>project.docs[0]);
+
+    return project;
   };
 
   const addNewProject = async (name: string): Promise<Project> => {
     const newProjectId = generateId();
-
-    // ! Destroy db
-    // projectsDb.destroy();
-    // panelsDb.destroy();
 
     // TODO: check if project name exists, deny creation
 
