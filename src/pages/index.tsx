@@ -111,26 +111,26 @@ const Home: NextPage = () => {
 
     // TODO: set error handler if currentPorjectId exists but project doesn't
     // TODO: set logic error handler; if currentPorjectId doesn't exists, then set the first item in projects list to currentProjectId.
-    if (currentProjectId) {
-      getProject(currentProjectId).then((project) => setCurrentProject(project));
-    }
-  }, []);
+    let stateProject: Types.Project, statePanels: Types.Panel[];
 
-  useEffect(() => {
-    //set panels of currently selected project
-    if (currentProject) {
-      getPanels(currentProject._id)
+    if (currentProjectId) {
+      getProject(currentProjectId)
+        .then((project) => {
+          stateProject = project;
+
+          return getPanels(currentProjectId);
+        })
         .then((panels) => {
           setPanels(panels);
-
-          return getTasks(currentProject._id);
+          return getTasks(currentProjectId);
         })
 
         .then((tasks) => {
+          setCurrentProject(stateProject);
           setTasks(tasks);
         });
     }
-  }, [currentProject]);
+  }, []);
 
   return (
     <>
@@ -138,8 +138,12 @@ const Home: NextPage = () => {
         <DragDropContext onDragEnd={(result) => handleDragEnd(result, currentProject)}>
           {currentProject &&
             currentProject.panelOrder.map((panelId) => {
+              console.log(panels);
+
               // TODO: create helper class for array.find()
               const panel: Types.Panel = panels.find(({ _id }) => _id === panelId) || PANEL_DEFAULT;
+
+              console.log(panel);
 
               // get tasks from current project
               const tasks: Types.Task[] = panel.taskIds.map<Types.Task>((taskId): Types.Task => {
