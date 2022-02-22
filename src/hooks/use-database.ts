@@ -93,6 +93,10 @@ const UseDatabase = () => {
     return panels;
   };
 
+  const savePanels = async (panels: Panel[]) => {
+    panelsDb.bulkDocs(panels);
+  };
+
   const getTasks = async (project_id: string): Promise<Task[]> => {
     const tasks = await tasksDb.find({ selector: { project_id } }).then((res) => <Task[]>res.docs);
 
@@ -131,7 +135,16 @@ const UseDatabase = () => {
     );
   };
 
-  return { getProjects, getProject, addNewProject, saveProject, getPanels, getTasks, addNewTask };
+  return {
+    getProjects,
+    getProject,
+    addNewProject,
+    saveProject,
+    getPanels,
+    savePanels,
+    getTasks,
+    addNewTask,
+  };
 };
 
 export default UseDatabase;

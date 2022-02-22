@@ -14,7 +14,7 @@ import * as Types from "../utils/types";
 
 const Home: NextPage = () => {
   const { getCurrentProjectId, saveProject } = useStore();
-  const { getProject, getPanels, getTasks } = useDatabase();
+  const { getProject, getPanels, getTasks, savePanels } = useDatabase();
   const { currentProject, setCurrentProject } = useProjectContext();
   const [panels, setPanels] = useState<Types.Panel[]>([]);
   const [tasks, setTasks] = useState<Types.Task[]>([]);
@@ -46,6 +46,7 @@ const Home: NextPage = () => {
     // TODO: create helper class for array.find()
     if (!startPanel) throw new TypeError(`Panel does not exist.`);
     if (!finishPanel) throw new TypeError(`Panel does not exist.`);
+
     // Move tasks within the same panel
     if (startPanel._id === finishPanel._id) {
       const newTaskIds = [...startPanel.taskIds];
@@ -68,6 +69,7 @@ const Home: NextPage = () => {
         // };
         // TODO: save new panels to db
         setPanels(newPanels);
+        savePanels(newPanels);
 
         // Save current project to store
         return prevCurrentProject;
@@ -102,6 +104,7 @@ const Home: NextPage = () => {
         // };
         // TODO: save new panels to db
         setPanels(newPanels);
+        savePanels(newPanels);
 
         // Save current project to store
         // saveProject(newCurrentProject);
