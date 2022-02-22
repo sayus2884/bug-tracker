@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import CardTask from "../../components/CardTask/CardTask";
 import InputInline from "../../components/InputInline/InputInline";
+import useDatabase from "../../hooks/use-database";
 import useStore from "./../../hooks/use-store";
 import { Task, Panel as IPanel } from "./../../utils/types";
 
@@ -28,16 +29,20 @@ const Panel: React.FC<Props> = ({
   ...props
 }) => {
   const [cardTitle, setCardTitle] = useState("");
-  const { addNewTask, removeTask } = useStore();
+  const { removeTask } = useStore();
+  const { addNewTask } = useDatabase();
 
   const handleCardTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCardTitle(event.target.value);
   };
 
   const handleAddTaskClick = () => {
-    // const newTask = addNewTask(cardTitle, projectId, panel.id);
-    // onTaskAdded(newTask);
-    reset();
+    addNewTask(cardTitle, projectId, panel._id).then(() => {
+      console.log("task added");
+
+      // onTaskAdded(newTask);
+      reset();
+    });
   };
 
   const handleRemoveTaskClick = (taskId: string): void => {

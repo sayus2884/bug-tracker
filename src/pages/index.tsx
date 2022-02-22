@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   const { getProject, getPanels, getTasks } = useDatabase();
   const { currentProject, setCurrentProject } = useProjectContext();
   const [panels, setPanels] = useState<Types.Panel[]>([]);
-  const [tasks, setTasks] = useState<Types.Task[]>();
+  const [tasks, setTasks] = useState<Types.Task[]>([]);
 
   const handleOnTaskAdded = (): void => {
     // setCurrentProject((currentProject: Project): Project => {
@@ -142,15 +142,16 @@ const Home: NextPage = () => {
         <DragDropContext onDragEnd={(result) => handleDragEnd(result, currentProject)}>
           {currentProject &&
             currentProject.panelOrder.map((panelId, i) => {
-              // TODO: create helper class for array.find()
-              const panel: Types.Panel = panels.find(({ _id }) => _id === panelId) || PANEL_DEFAULT;
+              const panel = panels.find(({ _id }) => _id === panelId) || PANEL_DEFAULT;
 
               // get tasks from current project
-              const tasks: Types.Task[] = panel.taskIds.map<Types.Task>((taskId): Types.Task => {
-                let task = tasks.find((task) => task._id === taskId) || TASK_DEFAULT;
+              const panelTasks: Types.Task[] = panel.taskIds.map<Types.Task>(
+                (taskId): Types.Task => {
+                  const task = tasks.find((task) => task._id === taskId) || TASK_DEFAULT;
 
-                return task;
-              });
+                  return task;
+                },
+              );
 
               return panel._id === PANEL_DEFAULT._id ? (
                 <div key={i}></div>
@@ -158,7 +159,7 @@ const Home: NextPage = () => {
                 <Panel
                   key={panel._id}
                   projectId={currentProject._id}
-                  tasks={[]}
+                  tasks={panelTasks}
                   canAddCard={panel.title === "Backlog"}
                   panel={panel}
                   onTaskAdded={handleOnTaskAdded}

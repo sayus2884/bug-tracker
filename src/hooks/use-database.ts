@@ -99,9 +99,39 @@ const UseDatabase = () => {
     return tasks;
   };
 
-  const addNewTask = async (title: string, project_id: string, panel_id: string) => {};
+  const addNewTask = (title: string, project_id: string, panel_id: string) => {
+    const taskId = generateId();
+    const newTask: Task = {
+      _id: taskId,
+      title,
+      description: "",
+      branch: "",
+      type: "",
+      priority: "bg-blue-500",
+      project_id,
+    };
 
-  return { getProjects, getProject, addNewProject, saveProject, getPanels, getTasks };
+    // update panel
+    return (
+      panelsDb
+        .get<Panel>(panel_id)
+        .then((panel: Panel) => {
+          const taskIds = Array.from(panel.taskIds);
+          taskIds.push(taskId);
+
+          // add taskId to panel.taskIds
+          return panelsDb.put({
+            ...panel,
+            taskIds,
+          });
+        })
+
+        // add task
+        .then(() => tasksDb.put(newTask))
+    );
+  };
+
+  return { getProjects, getProject, addNewProject, saveProject, getPanels, getTasks, addNewTask };
 };
 
 export default UseDatabase;

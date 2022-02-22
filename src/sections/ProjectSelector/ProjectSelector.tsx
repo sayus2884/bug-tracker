@@ -7,14 +7,14 @@ import useOutsideObserver from "./../../hooks/use-outside-observer";
 import useStore from "./../../hooks/use-store";
 import useDatabase from "./../../hooks/use-database";
 
-import ProjectContext from "./../../contexts/ProjectContext";
+import { useProjectContext } from "./../../contexts/ProjectContext";
 interface Props {
   className?: string;
 }
 
 // TODO: pass options here
 const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
-  const { setCurrentProject } = useContext(ProjectContext);
+  const { setCurrentProject } = useProjectContext();
 
   const { setCurrentProjectId, getCurrentProjectId } = useStore();
   const { addNewProject, getProjects, getProject } = useDatabase();
@@ -65,7 +65,7 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
 
   // const isOptionsAvailable = options.length > 0;
   const isOptionsAvailable = true;
-  const isSelectedOptionNameAvailable = false;
+  const isSelectedOptionNameAvailable = true;
   // const isSelectedOptionNameAvailable =
   // selectedOptionName.length > 3 && !options.some(({ name }) => name === selectedOptionName);
 
