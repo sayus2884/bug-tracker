@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import CardTask from "../../components/CardTask/CardTask";
 import InputInline from "../../components/InputInline/InputInline";
-import useStore, { Task, Panel as IPanel } from "./../../hooks/use-store";
+import useStore from "./../../hooks/use-store";
+import { Task, Panel as IPanel } from "./../../utils/types";
 
 interface Props {
   className?: string;
@@ -34,13 +35,13 @@ const Panel: React.FC<Props> = ({
   };
 
   const handleAddTaskClick = () => {
-    const newTask = addNewTask(cardTitle, projectId, panel.id);
-    onTaskAdded(newTask);
+    // const newTask = addNewTask(cardTitle, projectId, panel.id);
+    // onTaskAdded(newTask);
     reset();
   };
 
   const handleRemoveTaskClick = (taskId: string): void => {
-    removeTask(projectId, panel.id, taskId);
+    // removeTask(projectId, panel.id, taskId);
 
     onTaskRemoved(taskId);
   };
@@ -67,21 +68,14 @@ const Panel: React.FC<Props> = ({
           />
         </form>
       )}
-      <Droppable droppableId={panel.id}>
+      <Droppable droppableId={panel._id}>
         {(provided) => (
           <div
             className="flex flex-col flex-grow min-h-[100px] overflow-auto"
             ref={provided.innerRef}
             {...provided.droppableProps}>
             {tasks.map((task, i) => (
-              <CardTask
-                className="mb-10"
-                index={i}
-                key={task.id}
-                projectId={projectId}
-                onRemoveTask={handleRemoveTaskClick}
-                {...task}
-              />
+              <div>add card task here</div>
             ))}
             {provided.placeholder}
           </div>
@@ -91,4 +85,14 @@ const Panel: React.FC<Props> = ({
   );
 };
 
+{
+  /* <CardTask
+  className="mb-10"
+  index={i}
+  key={task.id}
+  projectId={projectId}
+  onRemoveTask={handleRemoveTaskClick}
+  {...task}
+/> */
+}
 export default Panel;

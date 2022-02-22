@@ -4,9 +4,8 @@ import { DragDropContext } from "react-beautiful-dnd";
 
 import Grid from "./../components/Grid/Grid";
 
-import useStore, { Task, Panel as IPanel } from "./../hooks/use-store";
-import { Project } from "./../utils/types";
-import { PANEL_DEFAULT } from "./../utils/defaults";
+import useStore, { Panel as IPanel } from "./../hooks/use-store";
+import { PANEL_DEFAULT, TASK_DEFAULT } from "./../utils/defaults";
 import ProjectContext from "../contexts/ProjectContext";
 import Panel from "./../sections/Panel/Panel";
 
@@ -15,7 +14,7 @@ import * as Types from "../utils/types";
 
 const Home: NextPage = () => {
   const { getCurrentProjectId, saveProject } = useStore();
-  const { getProject, getPanels } = useDatabase();
+  const { getProject, getPanels, getTasks } = useDatabase();
   const { currentProject, setCurrentProject } = useContext(ProjectContext);
   const [panels, setPanels] = useState<Types.Panel[]>([]);
   const [tasks, setTasks] = useState<Types.Task[]>();
@@ -32,7 +31,10 @@ const Home: NextPage = () => {
     // });
   };
 
-  const handleDragEnd = ({ destination, source, draggableId }: any, currentProject: Project) => {
+  const handleDragEnd = (
+    { destination, source, draggableId }: any,
+    currentProject: Types.Project,
+  ) => {
     // if (!destination) {
     //   return;
     // }
@@ -117,9 +119,16 @@ const Home: NextPage = () => {
   useEffect(() => {
     //set panels of currently selected project
     if (currentProject) {
-      getPanels(currentProject._id).then((panels) => {
-        setPanels(panels);
-      });
+      getPanels(currentProject._id)
+        .then((panels) => {
+          setPanels(panels);
+
+          return getTasks(currentProject._id);
+        })
+
+        .then((tasks) => {
+          setTasks(tasks);
+        });
     }
   }, [currentProject]);
 
@@ -132,33 +141,29 @@ const Home: NextPage = () => {
               // TODO: create helper class for array.find()
               const panel: Types.Panel = panels.find(({ _id }) => _id === panelId) || PANEL_DEFAULT;
 
-              // // get tasks from current project
-              // const tasks: Task[] = panel.taskIds.map<Task>((taskId): Task => {
-              //   let task = currentProject.tasks.find((task) => task.id === taskId);
+              // get tasks from current project
+              const tasks: Types.Task[] = panel.taskIds.map<Types.Task>((taskId): Types.Task => {
+                let task = tasks.find((task) => task._id === taskId) || TASK_DEFAULT;
 
-              //   if (!task)
-              //     // ! if Task does not exist, remove taskId from panel's taskIds
-              //     throw new TypeError(`Task with taskId ${taskId} does not exist.`);
+                return task;
+              });
 
-              //   return task;
-              // });
-
-              return <div>generate panel here</div>;
+              return (
+                <Panel
+                  key={panel._id}
+                  projectId={currentProject._id}
+                  tasks={[]}
+                  canAddCard={panel.title === "Backlog"}
+                  panel={panel}
+                  onTaskAdded={handleOnTaskAdded}
+                  onTaskRemoved={handleOnTaskRemoved}
+                />
+              );
             })}
         </DragDropContext>
       </Grid>
     </>
   );
 };
-
-// Panel
-//                   key={panel.id}
-//                   projectId={currentProject._id}
-//                   tasks={[]}
-//                   canAddCard={panel.title === "Backlog"}
-//                   panel={panel}
-//                   onTaskAdded={handleOnTaskAdded}
-//                   onTaskRemoved={handleOnTaskRemoved}
-//                 />
 
 export default Home;

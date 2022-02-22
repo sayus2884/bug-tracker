@@ -1,8 +1,7 @@
 import { delBasePath } from "next/dist/shared/lib/router/router";
 import { useDatabaseContext } from "../contexts/DatabaseContext";
 import { generateId } from "../utils/helpers";
-import { Panel, PanelCreate, ProjectCreate } from "../utils/types";
-import { Project } from "./../utils/types";
+import { Project, Panel, PanelCreate, ProjectCreate, Task } from "../utils/types";
 
 const UseDatabase = () => {
   const { projectsDb, tasksDb, panelsDb } = useDatabaseContext();
@@ -86,7 +85,7 @@ const UseDatabase = () => {
     return projectsDb.put(project);
   };
 
-  const getPanels = async (project_id: string) => {
+  const getPanels = async (project_id: string): Promise<Panel[]> => {
     const panels = await panelsDb
       .find({ selector: { project_id } })
       .then((res) => <Panel[]>res.docs);
@@ -94,9 +93,15 @@ const UseDatabase = () => {
     return panels;
   };
 
+  const getTasks = async (project_id: string): Promise<Task[]> => {
+    const tasks = await tasksDb.find({ selector: { project_id } }).then((res) => <Task[]>res.docs);
+
+    return tasks;
+  };
+
   const addNewTask = async (title: string, project_id: string, panel_id: string) => {};
 
-  return { getProjects, getProject, addNewProject, saveProject, getPanels };
+  return { getProjects, getProject, addNewProject, saveProject, getPanels, getTasks };
 };
 
 export default UseDatabase;
