@@ -82,7 +82,11 @@ const UseDatabase = () => {
     return project;
   };
 
-  return { getProjects, getProject, addNewProject };
+  const saveProject = async (project: Project): Promise<PouchDB.Core.Response> => {
+    return projectsDb.put(project);
+  };
+
+  return { getProjects, getProject, addNewProject, saveProject };
 };
 
 export default UseDatabase;
