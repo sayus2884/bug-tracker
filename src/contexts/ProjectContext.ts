@@ -1,18 +1,10 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createCtx } from "../utils/helpers";
 import { Project } from "../utils/types";
-
 export interface ProjectContextInterface {
   currentProject: Project;
   setCurrentProject: any;
 }
 
-const ProjectContext = createContext<ProjectContextInterface>({
-  currentProject: {
-    _id: "",
-    name: "",
-    panelOrder: [],
-  },
-  setCurrentProject: () => {},
-});
+const [useProjectContext, ProjectContext] = createCtx<ProjectContextInterface>();
 
-export default ProjectContext;
+export { useProjectContext, ProjectContext };

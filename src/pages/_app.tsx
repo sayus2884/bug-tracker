@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 
 import Layout from "../sections/Layout/Layout";
 
-import ProjectContext, { ProjectContextInterface } from "../contexts/ProjectContext";
+import { ProjectContext, ProjectContextInterface } from "../contexts/ProjectContext";
 const PouchDBContext = dynamic(() => import("../components/PouchDB/PouchDB"), { ssr: false });
 
 import useProject from "./../hooks/use-project";

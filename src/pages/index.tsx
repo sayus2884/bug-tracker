@@ -6,7 +6,7 @@ import Grid from "./../components/Grid/Grid";
 
 import useStore, { Panel as IPanel } from "./../hooks/use-store";
 import { PANEL_DEFAULT, TASK_DEFAULT } from "./../utils/defaults";
-import ProjectContext from "../contexts/ProjectContext";
+import { useProjectContext } from "../contexts/ProjectContext";
 import Panel from "./../sections/Panel/Panel";
 
 import useDatabase from "./../hooks/use-database";
@@ -15,7 +15,7 @@ import * as Types from "../utils/types";
 const Home: NextPage = () => {
   const { getCurrentProjectId, saveProject } = useStore();
   const { getProject, getPanels, getTasks } = useDatabase();
-  const { currentProject, setCurrentProject } = useContext(ProjectContext);
+  const { currentProject, setCurrentProject } = useProjectContext();
   const [panels, setPanels] = useState<Types.Panel[]>([]);
   const [tasks, setTasks] = useState<Types.Task[]>();
 
@@ -114,36 +114,36 @@ const Home: NextPage = () => {
     let stateProject: Types.Project, statePanels: Types.Panel[];
 
     if (currentProjectId) {
-      getProject(currentProjectId)
-        .then((project) => {
-          stateProject = project;
+      const fetchProject = async () => {
+        const project = await getProject(currentProjectId);
+        setCurrentProject(project);
+      };
 
-          return getPanels(currentProjectId);
-        })
-        .then((panels) => {
-          setPanels(panels);
-          return getTasks(currentProjectId);
-        })
-
-        .then((tasks) => {
-          setCurrentProject(stateProject);
-          setTasks(tasks);
-        });
+      fetchProject();
     }
   }, []);
+
+  useEffect(() => {
+    if (currentProject) {
+      const fetchPanelsAndTasks = async () => {
+        const panels = await getPanels(currentProject._id);
+        const tasks = await getTasks(currentProject._id);
+
+        setPanels(panels);
+        setTasks(tasks);
+      };
+      fetchPanelsAndTasks();
+    }
+  }, [currentProject]);
 
   return (
     <>
       <Grid className="flex gap-20">
         <DragDropContext onDragEnd={(result) => handleDragEnd(result, currentProject)}>
           {currentProject &&
-            currentProject.panelOrder.map((panelId) => {
-              console.log(panels);
-
+            currentProject.panelOrder.map((panelId, i) => {
               // TODO: create helper class for array.find()
               const panel: Types.Panel = panels.find(({ _id }) => _id === panelId) || PANEL_DEFAULT;
-
-              console.log(panel);
 
               // get tasks from current project
               const tasks: Types.Task[] = panel.taskIds.map<Types.Task>((taskId): Types.Task => {
@@ -152,7 +152,9 @@ const Home: NextPage = () => {
                 return task;
               });
 
-              return (
+              return panel._id === PANEL_DEFAULT._id ? (
+                <div key={i}></div>
+              ) : (
                 <Panel
                   key={panel._id}
                   projectId={currentProject._id}
