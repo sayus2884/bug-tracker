@@ -35,74 +35,79 @@ const Home: NextPage = () => {
     { destination, source, draggableId }: any,
     currentProject: Types.Project,
   ) => {
-    // if (!destination) {
-    //   return;
-    // }
-    // if (destination.droppableId === source.droppableId && destination.index === source.index) {
-    //   return;
-    // }
-    // const startPanel = currentProject.panels.find((panel) => panel.id === source.droppableId);
-    // const finishPanel = currentProject.panels.find((panel) => panel.id === destination.droppableId);
-    // // TODO: create helper class for array.find()
-    // if (!startPanel) throw new TypeError(`Panel does not exist.`);
-    // if (!finishPanel) throw new TypeError(`Panel does not exist.`);
-    // // Move tasks within the same panel
-    // if (startPanel.id === finishPanel.id) {
-    //   const newTaskIds = [...startPanel.taskIds];
-    //   newTaskIds.splice(source.index, 1);
-    //   newTaskIds.splice(destination.index, 0, draggableId);
-    //   setCurrentProject((prevCurrentProject: Project) => {
-    //     const newPanel = {
-    //       ...startPanel,
-    //       taskIds: newTaskIds,
-    //     };
-    //     const newPanels = prevCurrentProject.panels.map((panel: IPanel) => {
-    //       if (panel.id === newPanel.id) {
-    //         return newPanel;
-    //       }
-    //       return panel;
-    //     });
-    //     const newCurrentProject = {
-    //       ...prevCurrentProject,
-    //       panels: newPanels,
-    //     };
-    //     // Save current project to store
-    //     saveProject(newCurrentProject);
-    //     return newCurrentProject;
-    //   });
-    // } else {
-    //   // Move tasks between panels
-    //   const newStartTaskIds = [...startPanel.taskIds];
-    //   newStartTaskIds.splice(source.index, 1);
-    //   const newStartPanel: IPanel = {
-    //     ...startPanel,
-    //     taskIds: newStartTaskIds,
-    //   };
-    //   const newFinishTaskIds = [...finishPanel.taskIds];
-    //   newFinishTaskIds.splice(destination.index, 0, draggableId);
-    //   const newFinishPanel: IPanel = {
-    //     ...finishPanel,
-    //     taskIds: newFinishTaskIds,
-    //   };
-    //   setCurrentProject((prevCurrentProject: Project) => {
-    //     const newPanels = prevCurrentProject.panels.map((panel: IPanel) => {
-    //       if (panel.id === newStartPanel.id) {
-    //         return newStartPanel;
-    //       }
-    //       if (panel.id === newFinishPanel.id) {
-    //         return newFinishPanel;
-    //       }
-    //       return panel;
-    //     });
-    //     const newCurrentProject = {
-    //       ...prevCurrentProject,
-    //       panels: newPanels,
-    //     };
-    //     // Save current project to store
-    //     saveProject(newCurrentProject);
-    //     return newCurrentProject;
-    //   });
-    // }
+    if (!destination) {
+      return;
+    }
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
+    const startPanel = panels.find((panel) => panel._id === source.droppableId);
+    const finishPanel = panels.find((panel) => panel._id === destination.droppableId);
+    // TODO: create helper class for array.find()
+    if (!startPanel) throw new TypeError(`Panel does not exist.`);
+    if (!finishPanel) throw new TypeError(`Panel does not exist.`);
+    // Move tasks within the same panel
+    if (startPanel._id === finishPanel._id) {
+      const newTaskIds = [...startPanel.taskIds];
+      newTaskIds.splice(source.index, 1);
+      newTaskIds.splice(destination.index, 0, draggableId);
+      setCurrentProject((prevCurrentProject: Types.Project) => {
+        const newPanel = {
+          ...startPanel,
+          taskIds: newTaskIds,
+        };
+        const newPanels = panels.map((panel: Types.Panel) => {
+          if (panel._id === newPanel._id) {
+            return newPanel;
+          }
+          return panel;
+        });
+        // const newCurrentProject = {
+        //   ...prevCurrentProject,
+        //   panels: newPanels,
+        // };
+        // TODO: save new panels to db
+        setPanels(newPanels);
+
+        // Save current project to store
+        return prevCurrentProject;
+      });
+    } else {
+      // Move tasks between panels
+      const newStartTaskIds = [...startPanel.taskIds];
+      newStartTaskIds.splice(source.index, 1);
+      const newStartPanel: Types.Panel = {
+        ...startPanel,
+        taskIds: newStartTaskIds,
+      };
+      const newFinishTaskIds = [...finishPanel.taskIds];
+      newFinishTaskIds.splice(destination.index, 0, draggableId);
+      const newFinishPanel: Types.Panel = {
+        ...finishPanel,
+        taskIds: newFinishTaskIds,
+      };
+      setCurrentProject((prevCurrentProject: Types.Project) => {
+        const newPanels = panels.map((panel: Types.Panel) => {
+          if (panel._id === newStartPanel._id) {
+            return newStartPanel;
+          }
+          if (panel._id === newFinishPanel._id) {
+            return newFinishPanel;
+          }
+          return panel;
+        });
+        // const newCurrentProject = {
+        //   ...prevCurrentProject,
+        //   panels: newPanels,
+        // };
+        // TODO: save new panels to db
+        setPanels(newPanels);
+
+        // Save current project to store
+        // saveProject(newCurrentProject);
+        return prevCurrentProject;
+      });
+    }
   };
 
   // Initialize project grid if currentProjectId exists in store
