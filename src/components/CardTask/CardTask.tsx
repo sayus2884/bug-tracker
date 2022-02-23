@@ -59,8 +59,8 @@ const CardTask: React.FC<Props> = ({
   onRemoveTask,
   ...props
 }) => {
-  const { editTaskPriority, getProject } = useStore();
-  const { removeTask, editTaskTitle } = useDatabase();
+  const { getProject } = useStore();
+  const { removeTask, editTaskTitle, editTaskPriority } = useDatabase();
   const { setCurrentProject } = useProjectContext();
   const [isPrioritySelectionOpen, setIsPrioritySelectionOpen] = useState(false);
   const [titleInput, setTitleInput] = useState(title);
@@ -82,8 +82,8 @@ const CardTask: React.FC<Props> = ({
   };
 
   const handlePrioritySelected = (option: DropdownOptionEvent) => {
-    editTaskPriority(projectId, _id, option.value);
-    setCurrentProject(getProject(projectId));
+    editTaskPriority(option.value, _id);
+    // setCurrentProject(getProject(projectId));
 
     closePrioritySelector();
   };

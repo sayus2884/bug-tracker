@@ -155,11 +155,20 @@ const UseDatabase = () => {
     );
   };
 
-  const editTaskTitle = (newTitle: string, task_id: string) => {
+  const editTaskTitle = (title: string, task_id: string) => {
     return tasksDb.get<Task>(task_id).then((task: Task) => {
       return tasksDb.put<Task>({
         ...task,
-        title: newTitle,
+        title,
+      });
+    });
+  };
+
+  const editTaskPriority = (priority: string, task_id: string) => {
+    return tasksDb.get<Task>(task_id).then((task: Task) => {
+      return tasksDb.put<Task>({
+        ...task,
+        priority,
       });
     });
   };
@@ -174,7 +183,8 @@ const UseDatabase = () => {
     getTasks,
     addNewTask,
     removeTask,
-    editTaskTitle
+    editTaskTitle,
+    editTaskPriority,
   };
 };
 
