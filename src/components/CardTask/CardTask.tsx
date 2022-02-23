@@ -59,8 +59,8 @@ const CardTask: React.FC<Props> = ({
   onRemoveTask,
   ...props
 }) => {
-  const { editTaskPriority, editTaskTitle, getProject } = useStore();
-  const { removeTask } = useDatabase();
+  const { editTaskPriority, getProject } = useStore();
+  const { removeTask, editTaskTitle } = useDatabase();
   const { setCurrentProject } = useProjectContext();
   const [isPrioritySelectionOpen, setIsPrioritySelectionOpen] = useState(false);
   const [titleInput, setTitleInput] = useState(title);
@@ -108,7 +108,7 @@ const CardTask: React.FC<Props> = ({
     setIsEditable(false);
 
     if (title !== titleInput) {
-      editTaskTitle(projectId, _id, titleInput);
+      editTaskTitle(titleInput, _id);
     }
   };
 

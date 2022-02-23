@@ -137,12 +137,13 @@ const UseDatabase = () => {
 
   const removeTask = (task_id: string, panel_id: string) => {
     // update panel's taskIds
-    return panelsDb
+    return (
+      panelsDb
         .get<Panel>(panel_id)
         .then((panel: Panel) => {
           const taskIds = Array.from(panel.taskIds).filter((id) => id !== task_id);
 
-          return panelsDb.put({
+          return panelsDb.put<Panel>({
             ...panel,
             taskIds,
           });
@@ -151,6 +152,16 @@ const UseDatabase = () => {
         // remove task
         .then(() => tasksDb.get(task_id))
         .then((doc) => tasksDb.remove(doc))
+    );
+  };
+
+  const editTaskTitle = (newTitle: string, task_id: string) => {
+    return tasksDb.get<Task>(task_id).then((task: Task) => {
+      return tasksDb.put<Task>({
+        ...task,
+        title: newTitle,
+      });
+    });
   };
 
   return {
@@ -162,7 +173,8 @@ const UseDatabase = () => {
     savePanels,
     getTasks,
     addNewTask,
-    removeTask
+    removeTask,
+    editTaskTitle
   };
 };
 
