@@ -18,7 +18,15 @@ const UseDatabase = () => {
 
   const getProjects = async (): Promise<Project[]> => {
     const projects = await projectsDb.allDocs({ include_docs: true }).then((res) => {
-      return res.rows.map((row) => <Project>row.doc);
+      return res.rows
+        .filter((row) => {
+          console.log(row);
+
+          if (row.id === "_design/project-index-ddoc") return false;
+
+          return true;
+        })
+        .map((row) => <Project>row.doc);
     });
 
     return projects;
@@ -63,8 +71,7 @@ const UseDatabase = () => {
 
       .then((res) => {
         return projectsDb.get<Project>(res.id);
-      })
-      .then((res) => res);
+      });
 
     // save panels to db
     await panelsDb

@@ -66,7 +66,9 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
   const isSelectedOptionNameAvailable =
     selectedOptionInput.length > 3 && selectedOptionName !== selectedOptionInput;
 
-  const refreshOptions = (currentProjectId: string) => {
+  const refreshOptions = (currentProjectId: string | undefined) => {
+    if (!currentProjectId) return;
+
     getProjects().then((projects) => {
       const options: { name: string; value: string }[] = projects
 
@@ -95,7 +97,7 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
   // Initialize project options
   useEffect(() => {
     const currentProjectId = getCurrentProjectId();
-    refreshOptions(currentProjectId || "");
+    refreshOptions(currentProjectId || undefined);
   }, []);
 
   return (
@@ -138,14 +140,16 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
           aria-orientation="vertical"
           aria-labelledby="menu-button">
           <div className="py-1" role="none">
-            {options.map(({ value, name }, i) => (
-              <button
-                key={i}
-                onClick={() => handleOptionSelected(value, name)}
-                className="text-gray-700 block px-4 py-2 text-sm text-left w-full hover:bg-paper-100/60">
-                {name}
-              </button>
-            ))}
+            {options.map(({ value, name }, i) => {
+              return (
+                <button
+                  key={i}
+                  onClick={() => handleOptionSelected(value, name)}
+                  className="text-gray-700 block px-4 py-2 text-sm text-left w-full hover:bg-paper-100/60">
+                  {name}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

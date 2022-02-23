@@ -11,13 +11,9 @@ const projectsDb: PouchDB.Database = new PouchDB("projects");
 const tasksDb: PouchDB.Database = new PouchDB("tasks");
 const panelsDb: PouchDB.Database = new PouchDB("panels");
 
-projectsDb
-  .createIndex({
-    index: { fields: ["_id"], ddoc: "project-index-ddoc" },
-  })
-  .then((res) => {
-    console.log(res);
-  });
+projectsDb.createIndex({
+  index: { fields: ["_id"], ddoc: "project-index-ddoc" },
+});
 
 tasksDb.createIndex({
   index: { fields: ["project_id"], ddoc: "project-id-index-ddoc" },
