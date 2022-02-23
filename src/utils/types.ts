@@ -28,3 +28,8 @@ export interface Project {
 }
 
 export interface ProjectCreate extends Omit<Project, "tasks" | "panels"> {}
+
+export interface Option {
+  name: string;
+  value: string;
+}

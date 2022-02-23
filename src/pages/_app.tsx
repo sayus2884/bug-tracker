@@ -15,10 +15,22 @@ const SafeHydrate: React.FC = ({ children }) => {
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { currentProject, setCurrentProject } = useProject();
+  const {
+    currentProject,
+    setCurrentProject,
+    currentPanels,
+    setCurrentPanels,
+    currentTasks,
+    setCurrentTasks,
+  } = useProject();
+
   const projectContext: ProjectContextInterface = {
     currentProject,
     setCurrentProject,
+    currentPanels,
+    setCurrentPanels,
+    currentTasks,
+    setCurrentTasks,
   };
 
   return (

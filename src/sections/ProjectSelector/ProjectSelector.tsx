@@ -12,27 +12,26 @@ interface Props {
   className?: string;
 }
 
-// TODO: pass options here
+// ? pass project options instead of initializing here?
+
 const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
   const { setCurrentProject } = useProjectContext();
-
   const { setCurrentProjectId, getCurrentProjectId } = useStore();
   const { addNewProject, getProjects, getProject } = useDatabase();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedOptionInput, setSelectedOptionInput] = useState("");
   const [selectedOptionName, setSelectedOptionName] = useState("");
   const [options, setOptions] = useState<{ name: string; value: string }[]>([]);
   const containerRef = useRef(null);
 
-  const handleOptionSelected = (projectId: string, name: string): void => {
+  const handleOptionSelected = async (projectId: string, name: string) => {
+    const project = await getProject(projectId);
+    setCurrentProject(project);
+    setCurrentProjectId(projectId);
+    setSelectedOptionInput(name);
     setSelectedOptionName(name);
-    getProject(projectId).then((project) => {
-      setCurrentProject(project);
-      setCurrentProjectId(projectId);
-    });
-    // TODO: update project state
-
-    // setCurrentProject(getProject(id));
+    refreshOptions(projectId);
 
     close();
   };
@@ -40,19 +39,19 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
   const handleAddProject = async (event: React.SyntheticEvent): Promise<void> => {
     event.preventDefault();
 
-    if (options.some(({ name }) => name === selectedOptionName)) {
+    if (options.some(({ name }) => name === selectedOptionInput)) {
       return;
     }
 
-    const project = await addNewProject(selectedOptionName);
-
-    // TODO: update project state
+    const project = await addNewProject(selectedOptionInput);
+    setCurrentProject(project);
+    refreshOptions(project._id);
 
     close();
   };
 
   const handleProjectInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setSelectedOptionName(event.target.value);
+    setSelectedOptionInput(event.target.value);
   };
 
   const close = (): void => {
@@ -63,28 +62,40 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
     setIsOpen(true);
   };
 
-  // const isOptionsAvailable = options.length > 0;
-  const isOptionsAvailable = true;
-  const isSelectedOptionNameAvailable = true;
-  // const isSelectedOptionNameAvailable =
-  // selectedOptionName.length > 3 && !options.some(({ name }) => name === selectedOptionName);
+  const isOptionsAvailable = options.length > 0;
+  const isSelectedOptionNameAvailable =
+    selectedOptionInput.length > 3 && selectedOptionName !== selectedOptionInput;
+
+  const refreshOptions = (currentProjectId: string) => {
+    getProjects().then((projects) => {
+      const options: { name: string; value: string }[] = projects
+
+        // Remove currently selected project from options
+        .filter(({ _id, name }) => {
+          if (_id === currentProjectId) {
+            setSelectedOptionInput(name);
+            setSelectedOptionName(name);
+            return false;
+          }
+
+          return true;
+        })
+
+        // save the rest
+        .map(({ _id, name }) => {
+          return { value: _id, name };
+        });
+
+      setOptions(options);
+    });
+  };
 
   useOutsideObserver(containerRef, () => close());
 
   // Initialize project options
   useEffect(() => {
     const currentProjectId = getCurrentProjectId();
-    getProjects().then((projects) => {
-      const options: { name: string; value: string }[] = projects.map(({ _id, name }) => {
-        //set current project name
-        if (_id === currentProjectId) {
-          setSelectedOptionName(name);
-        }
-
-        return { value: _id, name };
-      });
-      setOptions(options);
-    });
+    refreshOptions(currentProjectId || "");
   }, []);
 
   return (
@@ -100,7 +111,7 @@ const ProjectSelector: React.FC<Props> = ({ className, ...props }) => {
             className="outline:none px-4 py-2"
             onFocus={open}
             onChange={handleProjectInputChange}
-            value={selectedOptionName}
+            value={selectedOptionInput}
           />
 
           {(isOpen || !isOptionsAvailable) && (

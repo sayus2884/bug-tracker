@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Project } from "../utils/types";
+import { Project, Panel, Task } from "../utils/types";
 
 const UseProject = () => {
   const projectDefault: Project = {
@@ -7,9 +7,19 @@ const UseProject = () => {
     name: "",
     panelOrder: [],
   };
-  const [currentProject, setCurrentProject] = useState(projectDefault);
 
-  return { currentProject, setCurrentProject };
+  const [currentProject, setCurrentProject] = useState<Project>(projectDefault);
+  const [currentPanels, setCurrentPanels] = useState<Panel[]>([]);
+  const [currentTasks, setCurrentTasks] = useState<Task[]>([]);
+
+  return {
+    currentProject,
+    setCurrentProject,
+    currentPanels,
+    setCurrentPanels,
+    currentTasks,
+    setCurrentTasks,
+  };
 };
 
 export default UseProject;
