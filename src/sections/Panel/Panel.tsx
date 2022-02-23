@@ -30,7 +30,6 @@ const Panel: React.FC<Props> = ({
   ...props
 }) => {
   const [cardTitle, setCardTitle] = useState("");
-  const { removeTask } = useStore();
   const { addNewTask } = useDatabase();
 
   const handleCardTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -59,7 +59,6 @@ const CardTask: React.FC<Props> = ({
   onRemoveTask,
   ...props
 }) => {
-  const { getProject } = useStore();
   const { removeTask, editTaskTitle, editTaskPriority } = useDatabase();
   const { setCurrentProject } = useProjectContext();
   const [isPrioritySelectionOpen, setIsPrioritySelectionOpen] = useState(false);

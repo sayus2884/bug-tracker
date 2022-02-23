@@ -4,7 +4,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 
 import Grid from "./../components/Grid/Grid";
 
-import useStore, { Panel as IPanel } from "./../hooks/use-store";
+import useStore from "./../hooks/use-store";
 import { PANEL_DEFAULT, TASK_DEFAULT } from "./../utils/defaults";
 import { useProjectContext } from "../contexts/ProjectContext";
 import Panel from "./../sections/Panel/Panel";
@@ -13,7 +13,7 @@ import useDatabase from "./../hooks/use-database";
 import * as Types from "../utils/types";
 
 const Home: NextPage = () => {
-  const { getCurrentProjectId, saveProject } = useStore();
+  const { getCurrentProjectId } = useStore();
   const { getProject, getPanels, getTasks, savePanels } = useDatabase();
   const { currentProject, setCurrentProject } = useProjectContext();
   const [panels, setPanels] = useState<Types.Panel[]>([]);
