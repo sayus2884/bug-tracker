@@ -20,11 +20,10 @@ const Home: NextPage = () => {
   const [tasks, setTasks] = useState<Types.Task[]>([]);
 
   const handleOnTaskAdded = (newTask: Types.Task) => {
-    refreshPanels();
-    refreshTasks();
+    refresh();
   };
 
-  const handleOnTaskRemoved = (): void => {
+  const handleOnTaskRemoved = async () => {
     getProject(currentProject._id).then((project) => {
       setCurrentProject(project);
     });
@@ -67,7 +66,6 @@ const Home: NextPage = () => {
         setPanels(newPanels);
         savePanels(newPanels);
 
-        // TODO: update state
         return prevCurrentProject;
       });
     } else {
@@ -99,13 +97,14 @@ const Home: NextPage = () => {
         // save new panels to db
         savePanels(newPanels);
 
-        // TODO: update state
         return prevCurrentProject;
       });
     }
+
+    // update panels and tasks
+    refresh();
   };
 
-  // TODO: create function/useEffect for updating current project
   const refreshPanels = async () => {
     const panels = await getPanels(currentProject._id);
     setPanels(panels);
@@ -114,6 +113,11 @@ const Home: NextPage = () => {
   const refreshTasks = async () => {
     const tasks = await getTasks(currentProject._id);
     setTasks(tasks);
+  };
+
+  const refresh = () => {
+    refreshPanels();
+    refreshTasks();
   };
 
   // Initialize project grid if currentProjectId exists in store
@@ -136,8 +140,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     if (currentProject) {
-      refreshPanels();
-      refreshTasks();
+      refresh();
     }
   }, [currentProject]);
 

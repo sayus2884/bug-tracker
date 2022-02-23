@@ -11,7 +11,6 @@ import DropdownOptions, {
   DropdownOptionEvent,
 } from "./../DropdownOptions/DropdownOptions";
 
-import useStore from "./../../hooks/use-store";
 import { Task } from "./../../utils/types";
 import useOutsideObserver from "./../../hooks/use-outside-observer";
 import { useProjectContext } from "../../contexts/ProjectContext";
@@ -59,7 +58,7 @@ const CardTask: React.FC<Props> = ({
   onRemoveTask,
   ...props
 }) => {
-  const { removeTask, editTaskTitle, editTaskPriority } = useDatabase();
+  const { removeTask, editTaskTitle, editTaskPriority, getProject } = useDatabase();
   const { setCurrentProject } = useProjectContext();
   const [isPrioritySelectionOpen, setIsPrioritySelectionOpen] = useState(false);
   const [titleInput, setTitleInput] = useState(title);
@@ -80,10 +79,10 @@ const CardTask: React.FC<Props> = ({
     setIsPrioritySelectionOpen((toggle) => !toggle);
   };
 
-  const handlePrioritySelected = (option: DropdownOptionEvent) => {
+  const handlePrioritySelected = async (option: DropdownOptionEvent) => {
     editTaskPriority(option.value, _id);
-    // setCurrentProject(getProject(projectId));
-
+    const project = await getProject(projectId);
+    setCurrentProject(project);
     closePrioritySelector();
   };
 

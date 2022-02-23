@@ -94,7 +94,7 @@ const UseDatabase = () => {
   };
 
   const savePanels = (panels: Panel[]) => {
-    panelsDb.bulkDocs(panels);
+    return panelsDb.bulkDocs(panels);
   };
 
   const getTasks = async (project_id: string): Promise<Task[]> => {
