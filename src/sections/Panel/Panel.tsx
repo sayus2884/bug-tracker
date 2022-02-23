@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import CardTask from "../../components/CardTask/CardTask";
 import InputInline from "../../components/InputInline/InputInline";
 import useDatabase from "../../hooks/use-database";
 import { TASK_DEFAULT } from "../../utils/defaults";
-import useStore from "./../../hooks/use-store";
 import { Task, Panel as IPanel } from "./../../utils/types";
 
 interface Props {
@@ -13,7 +12,7 @@ interface Props {
   projectId: string;
   tasks: Task[] | [];
   panel: IPanel;
-  onTaskAdded: (task: Task) => void;
+  onTaskAdded?: (task: Task) => void;
   onTaskRemoved: (id: string) => void;
 }
 
@@ -36,13 +35,13 @@ const Panel: React.FC<Props> = ({
     setCardTitle(event.target.value);
   };
 
-  const handleAddTaskClick = () => {
-    addNewTask(cardTitle, projectId, panel._id).then(() => {
-      console.log("task added");
+  const handleAddTaskClick = async (event: SyntheticEvent) => {
+    event.preventDefault();
 
-      // onTaskAdded(newTask);
-      reset();
-    });
+    const newTask = await addNewTask(cardTitle, projectId, panel._id);
+    onTaskAdded && onTaskAdded(newTask);
+
+    reset();
   };
 
   const handleRemoveTaskClick = (taskId: string): void => {

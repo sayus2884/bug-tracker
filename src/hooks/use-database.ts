@@ -103,7 +103,7 @@ const UseDatabase = () => {
     return tasks;
   };
 
-  const addNewTask = (title: string, project_id: string, panel_id: string) => {
+  const addNewTask = (title: string, project_id: string, panel_id: string): Promise<Task> => {
     const taskId = generateId();
     const newTask: Task = {
       _id: taskId,
@@ -132,6 +132,9 @@ const UseDatabase = () => {
 
         // add task
         .then(() => tasksDb.put(newTask))
+        .then(({ rev }) => {
+          return { ...newTask, _rev: rev };
+        })
     );
   };
 
