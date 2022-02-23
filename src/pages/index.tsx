@@ -26,9 +26,9 @@ const Home: NextPage = () => {
   };
 
   const handleOnTaskRemoved = (): void => {
-    // setCurrentProject((currentProject: Project): Project => {
-    //   return getProject(currentProject.id);
-    // });
+    getProject(currentProject._id).then((project) => {
+      setCurrentProject(project);
+    });
   };
 
   const handleDragEnd = (
@@ -63,15 +63,12 @@ const Home: NextPage = () => {
           }
           return panel;
         });
-        // const newCurrentProject = {
-        //   ...prevCurrentProject,
-        //   panels: newPanels,
-        // };
-        // TODO: save new panels to db
+
+        // save new panels to db
         setPanels(newPanels);
         savePanels(newPanels);
 
-        // Save current project to store
+        // TODO: update state
         return prevCurrentProject;
       });
     } else {
@@ -98,20 +95,18 @@ const Home: NextPage = () => {
           }
           return panel;
         });
-        // const newCurrentProject = {
-        //   ...prevCurrentProject,
-        //   panels: newPanels,
-        // };
-        // TODO: save new panels to db
+
         setPanels(newPanels);
+        // save new panels to db
         savePanels(newPanels);
 
-        // Save current project to store
-        // saveProject(newCurrentProject);
+        // TODO: update state
         return prevCurrentProject;
       });
     }
   };
+
+  // TODO: create function/useEffect for updating current project
 
   // Initialize project grid if currentProjectId exists in store
   useEffect(() => {

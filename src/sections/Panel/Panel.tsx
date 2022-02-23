@@ -47,8 +47,6 @@ const Panel: React.FC<Props> = ({
   };
 
   const handleRemoveTaskClick = (taskId: string): void => {
-    // removeTask(projectId, panel.id, taskId);
-
     onTaskRemoved(taskId);
   };
 
@@ -89,6 +87,7 @@ const Panel: React.FC<Props> = ({
                   index={i}
                   key={task._id}
                   projectId={projectId}
+                  panelId={panel._id}
                   onRemoveTask={handleRemoveTaskClick}
                   {...task}
                 />

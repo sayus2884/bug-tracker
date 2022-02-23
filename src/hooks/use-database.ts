@@ -93,7 +93,7 @@ const UseDatabase = () => {
     return panels;
   };
 
-  const savePanels = async (panels: Panel[]) => {
+  const savePanels = (panels: Panel[]) => {
     panelsDb.bulkDocs(panels);
   };
 
@@ -135,6 +135,24 @@ const UseDatabase = () => {
     );
   };
 
+  const removeTask = (task_id: string, panel_id: string) => {
+    // update panel's taskIds
+    return panelsDb
+        .get<Panel>(panel_id)
+        .then((panel: Panel) => {
+          const taskIds = Array.from(panel.taskIds).filter((id) => id !== task_id);
+
+          return panelsDb.put({
+            ...panel,
+            taskIds,
+          });
+        })
+
+        // remove task
+        .then(() => tasksDb.get(task_id))
+        .then((doc) => tasksDb.remove(doc))
+  };
+
   return {
     getProjects,
     getProject,
@@ -144,6 +162,7 @@ const UseDatabase = () => {
     savePanels,
     getTasks,
     addNewTask,
+    removeTask
   };
 };
 

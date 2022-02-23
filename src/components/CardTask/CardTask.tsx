@@ -15,11 +15,13 @@ import useStore from "./../../hooks/use-store";
 import { Task } from "./../../utils/types";
 import useOutsideObserver from "./../../hooks/use-outside-observer";
 import { useProjectContext } from "../../contexts/ProjectContext";
+import useDatabase from "./../../hooks/use-database";
 
 interface Props extends Task {
   className?: string;
   onRemoveTask: (task: string) => void;
   projectId: string;
+  panelId: string;
   index: number;
 }
 
@@ -51,12 +53,14 @@ const CardTask: React.FC<Props> = ({
   type,
   priority,
   projectId,
+  panelId,
   index,
 
   onRemoveTask,
   ...props
 }) => {
   const { editTaskPriority, editTaskTitle, getProject } = useStore();
+  const { removeTask } = useDatabase();
   const { setCurrentProject } = useProjectContext();
   const [isPrioritySelectionOpen, setIsPrioritySelectionOpen] = useState(false);
   const [titleInput, setTitleInput] = useState(title);
@@ -69,6 +73,7 @@ const CardTask: React.FC<Props> = ({
   };
 
   const handleRemoveTaskClick = () => {
+    removeTask(_id, panelId);
     onRemoveTask(_id);
   };
 
